@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_dotenv: ^6.0.0
+  flutter_image_compress: ^2.4.0
   flutter_localizations:
     sdk: flutter
   flutter_riverpod: ^3.1.0
@@ -40,3 +41,11 @@ flutter:
     - assets/i18n/en.json
     - assets/i18n/fr.json
     - .env
+  fonts:
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/Lato-Regular.ttf
+        - asset: assets/fonts/Lato-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Lato-Italic.ttf
+          style: italic
