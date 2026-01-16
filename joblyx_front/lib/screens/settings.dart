@@ -36,27 +36,27 @@ class SettingsScreen extends ConsumerWidget {
                 context,
               ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
             ),
-            SizedBox(height: 2.h),
+            const SizedBox(height: 2),
             const AccountSettings(),
-            SizedBox(height: 2.h),
+            const SizedBox(height: 2),
             Text(
               t.t('settings.documentation'),
               style: Theme.of(
                 context,
               ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
             ),
-            SizedBox(height: 2.h),
+            const SizedBox(height: 2),
             const Documents(),
-            SizedBox(height: 2.h),
+            const SizedBox(height: 2),
             Text(
               t.t('settings.support'),
               style: Theme.of(
                 context,
               ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
             ),
-            SizedBox(height: 2.h),
+            const SizedBox(height: 2),
             const Support(),
-            SizedBox(height: 24.h),
+            const SizedBox(height: 24),
              SizedBox(
               width: double.infinity,
               height: 52.h,

@@ -12,7 +12,7 @@ class GetPicture extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Cache Theme pour éviter les appels répétés
+  
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     final textTheme = theme.textTheme;
@@ -67,7 +67,6 @@ class GetPicture extends ConsumerWidget {
   }
 }
 
-/// Avatar avec bouton caméra extrait
 class _AvatarWithCamera extends StatelessWidget {
   final String? imageUrl;
   final Color primaryColor;

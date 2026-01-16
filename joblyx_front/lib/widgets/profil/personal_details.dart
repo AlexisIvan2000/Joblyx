@@ -10,7 +10,7 @@ class PersonalDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Cache Theme et TextTheme pour éviter les appels répétés
+    
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     final textTheme = theme.textTheme;
@@ -31,7 +31,7 @@ class PersonalDetails extends ConsumerWidget {
           return const SizedBox.shrink();
         }
 
-        // Styles réutilisables (évite de recréer les objets)
+        
         final labelStyle = textTheme.bodyMedium?.copyWith(
           fontWeight: FontWeight.w600,
         );
@@ -129,7 +129,6 @@ class PersonalDetails extends ConsumerWidget {
   }
 }
 
-/// Widget extrait pour les lignes de détails - évite les rebuilds inutiles
 class _DetailTile extends StatelessWidget {
   final String label;
   final String value;
@@ -161,7 +160,7 @@ class _DetailTile extends StatelessWidget {
   }
 }
 
-/// Widget spécialisé pour l'email avec overflow handling
+
 class _EmailTile extends StatelessWidget {
   final String label;
   final String value;

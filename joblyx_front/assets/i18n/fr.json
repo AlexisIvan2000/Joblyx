@@ -104,7 +104,7 @@
     "session_expired": "Votre session a expiré. Veuillez vous reconnecter.",
     "same_password": "Le nouveau mot de passe est le même que l'ancien.",
     "invalid_credentials": "Mail ou mot de passe invalide.",
-    "email_not_confirmed": "Email non confirmé. Veuillez vérifier votre boîte de réception.",
+    "email_not_confirmed": "Email non confirmé. Veuillez vous réenregistrer.",
     "over_email_send_rate_limit": "Trop de demandes. Veuillez réessayer plus tard.",
     "user_not_found": "Aucun utilisateur trouvé pour cet email.",
     "unknown_error": "Une erreur inconnue est survenue. Veuillez réessayer.",

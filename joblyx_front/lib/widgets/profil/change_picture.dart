@@ -16,11 +16,11 @@ void showChangePictureDialog(BuildContext context, WidgetRef ref) {
   );
 }
 
-/// Dialog extrait en widget séparé pour éviter les recreations inutiles
+
 class _ChangePictureDialog extends StatelessWidget {
   final WidgetRef ref;
 
-  // ImagePicker en static pour éviter les réinstanciations
+  
   static final _picker = ImagePicker();
 
   const _ChangePictureDialog({required this.ref});
@@ -116,7 +116,7 @@ class _ChangePictureDialog extends StatelessWidget {
   }
 }
 
-/// Bouton d'action extrait pour réutilisabilité
+
 class _ActionButton extends StatelessWidget {
   final String label;
   final bool filled;
@@ -148,7 +148,7 @@ class _ActionButton extends StatelessWidget {
   }
 }
 
-/// Textes d'information extraits
+
 class _InfoTexts extends StatelessWidget {
   final String maxFileSizeText;
   final String fileTypeText;
