@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:joblyx_front/providers/user_provider.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
 
@@ -34,7 +35,7 @@ class HomeScreen extends ConsumerWidget {
                   backgroundColor: cs.surface,
                   radius: 24.r,
                   backgroundImage: user.profilePicture.isNotEmpty
-                      ? NetworkImage(user.profilePicture)
+                      ? CachedNetworkImageProvider(user.profilePicture)
                       : const AssetImage('assets/images/profile.png')
                             as ImageProvider,
                 ),
