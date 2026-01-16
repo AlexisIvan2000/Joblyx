@@ -15,3 +15,32 @@ final userProvider = StreamProvider<UserModel?>((ref) {
       .map((data) =>
        data.isEmpty ? null : UserModel.fromMap(data.first));
 });
+
+// Selective providers to avoid unnecessary rebuilds
+final userFirstNameProvider = Provider<AsyncValue<String?>>((ref) {
+  return ref.watch(userProvider.select((async) => async.whenData((u) => u?.firstName)));
+});
+
+final userProfilePictureProvider = Provider<AsyncValue<String?>>((ref) {
+  return ref.watch(userProvider.select((async) => async.whenData((u) => u?.profilePicture)));
+});
+
+final userCreatedAtProvider = Provider<AsyncValue<DateTime?>>((ref) {
+  return ref.watch(userProvider.select((async) => async.whenData((u) => u?.createdAt)));
+});
+
+// Combined provider for home screen (firstName + profilePicture)
+final userHomeDataProvider = Provider<AsyncValue<({String? firstName, String? profilePicture})>>((ref) {
+  return ref.watch(userProvider.select((async) => async.whenData((u) => (
+    firstName: u?.firstName,
+    profilePicture: u?.profilePicture,
+  ))));
+});
+
+// Combined provider for profile picture card (profilePicture + createdAt)
+final userPictureCardProvider = Provider<AsyncValue<({String? profilePicture, DateTime? createdAt})>>((ref) {
+  return ref.watch(userProvider.select((async) => async.whenData((u) => (
+    profilePicture: u?.profilePicture,
+    createdAt: u?.createdAt,
+  ))));
+});

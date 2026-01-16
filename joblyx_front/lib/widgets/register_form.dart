@@ -18,6 +18,9 @@ class RegisterForm extends ConsumerStatefulWidget {
 }
 
 class _RegisterFormState extends ConsumerState<RegisterForm> {
+ 
+  static final _emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
   final _formKey = GlobalKey<FormState>();
   final _firstNameController = TextEditingController();
@@ -25,7 +28,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
-   bool _isLoading = false;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -133,7 +136,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
                 if (value == null || value.isEmpty) {
                   return t.t('register.no_email');
                 }
-                if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                if (!_emailRegex.hasMatch(value)) {
                   return t.t('register.invalid_email');
                 }
                 return null;

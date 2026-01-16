@@ -37,7 +37,7 @@ class SettingsScreen extends ConsumerWidget {
               ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
             ),
             SizedBox(height: 2.h),
-            AccountSettings(),
+            const AccountSettings(),
             SizedBox(height: 2.h),
             Text(
               t.t('settings.documentation'),
@@ -46,7 +46,7 @@ class SettingsScreen extends ConsumerWidget {
               ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
             ),
             SizedBox(height: 2.h),
-            Documents(),
+            const Documents(),
             SizedBox(height: 2.h),
             Text(
               t.t('settings.support'),
@@ -55,7 +55,7 @@ class SettingsScreen extends ConsumerWidget {
               ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
             ),
             SizedBox(height: 2.h),
-            Support(),
+            const Support(),
             SizedBox(height: 24.h),
              SizedBox(
               width: double.infinity,

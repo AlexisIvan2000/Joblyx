@@ -10,162 +10,192 @@ class PersonalDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final cs = Theme.of(context).colorScheme;
+    // Cache Theme et TextTheme pour éviter les appels répétés
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final textTheme = theme.textTheme;
     final t = AppLocalizations.of(context);
     final userAsync = ref.watch(userProvider);
 
     return userAsync.when(
       loading: () => Padding(
         padding: EdgeInsets.all(16.h),
-        child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+        child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
       ),
       error: (_, __) => Text(
         t.t('err.error'),
-        style: Theme.of(
-          context,
-        ).textTheme.bodyMedium?.copyWith(color: cs.error),
+        style: textTheme.bodyMedium?.copyWith(color: cs.error),
       ),
       data: (user) {
         if (user == null) {
           return const SizedBox.shrink();
         }
+
+        // Styles réutilisables (évite de recréer les objets)
+        final labelStyle = textTheme.bodyMedium?.copyWith(
+          fontWeight: FontWeight.w600,
+        );
+        final valueStyle = textTheme.bodyMedium;
+
         return Card(
           color: Colors.grey[300],
           margin: EdgeInsets.symmetric(vertical: 16.h),
           child: Column(
             children: [
-              ListTile(
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      t.t('register.first_name'),
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      user.firstName.isNotEmpty ? user.firstName : '-----',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ],
+              _DetailTile(
+                label: t.t('register.first_name'),
+                value: user.firstName.isNotEmpty ? user.firstName : '-----',
+                labelStyle: labelStyle,
+                valueStyle: valueStyle,
+                onTap: () => _showEditSheet(
+                  context,
+                  cs.surface,
+                  t.t('register.first_name'),
+                  'first_name',
+                  user.firstName,
                 ),
-                trailing: Icon(Icons.chevron_right),
-                onTap: () {
-                  showModalBottomSheet(
-                    backgroundColor: cs.surface,
-                    context: context,
-                    isScrollControlled: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(20.r),
-                      ),
-                    ),
-                    builder: (context) => EditFieldSheet(
-                      title: t.t('register.first_name'),
-                      field: 'first_name',
-                      initialValue: user.firstName,
-                    ),
-                  );
-                },
               ),
-              Divider(height: 1.h, color: Colors.grey[400]),
-              ListTile(
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      t.t('register.last_name'),
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      user.lastName.isNotEmpty ? user.lastName : '-----',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ],
+              _buildDivider(),
+              _DetailTile(
+                label: t.t('register.last_name'),
+                value: user.lastName.isNotEmpty ? user.lastName : '-----',
+                labelStyle: labelStyle,
+                valueStyle: valueStyle,
+                onTap: () => _showEditSheet(
+                  context,
+                  cs.surface,
+                  t.t('register.last_name'),
+                  'last_name',
+                  user.lastName,
                 ),
-                trailing: Icon(Icons.chevron_right),
-                onTap: () {
-                  showModalBottomSheet(
-                    backgroundColor: cs.surface,
-                    context: context,
-                    isScrollControlled: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(20.r),
-                      ),
-                    ),
-                    builder: (context) => EditFieldSheet(
-                      title: t.t('register.last_name'),
-                      field: 'last_name',
-                      initialValue: user.lastName,
-                    ),
-                  );
-                },
               ),
-              Divider(height: 1.h, color: Colors.grey[400]),
-              ListTile(
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      t.t('register.email'),
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(width: 12.w),
-                    Expanded(
-                      child: Text(
-                        user.email.isNotEmpty ? user.email : 'user@gmail.com',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                        textAlign: TextAlign.right,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                    ),
-                  ],
-                ),
-                trailing: Icon(Icons.chevron_right),
+              _buildDivider(),
+              _EmailTile(
+                label: t.t('register.email'),
+                value: user.email.isNotEmpty ? user.email : 'user@gmail.com',
+                labelStyle: labelStyle,
+                valueStyle: valueStyle,
+              ),
+              _buildDivider(),
+              _DetailTile(
+                label: t.t('register.password'),
+                value: '***********',
+                labelStyle: labelStyle,
+                valueStyle: valueStyle,
                 onTap: () {},
               ),
-              Divider(height: 1.h, color: Colors.grey[400]),
-              ListTile(
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      t.t('register.password'),
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      '***********',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ],
-                ),
-                trailing: Icon(Icons.chevron_right),
-                onTap: () {},
-              ),
-              Divider(height: 1.h, color: Colors.grey[400]),
+              _buildDivider(),
               ListTile(
                 title: Text(
                   t.t('profil.delete_account'),
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                  style: labelStyle,
                 ),
-                trailing: Icon(Icons.chevron_right),
+                trailing: const Icon(Icons.chevron_right),
                 onTap: () {},
               ),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildDivider() {
+    return Divider(height: 1.h, color: Colors.grey[400]);
+  }
+
+  void _showEditSheet(
+    BuildContext context,
+    Color backgroundColor,
+    String title,
+    String field,
+    String initialValue,
+  ) {
+    showModalBottomSheet(
+      backgroundColor: backgroundColor,
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20.r),
+        ),
+      ),
+      builder: (context) => EditFieldSheet(
+        title: title,
+        field: field,
+        initialValue: initialValue,
+      ),
+    );
+  }
+}
+
+/// Widget extrait pour les lignes de détails - évite les rebuilds inutiles
+class _DetailTile extends StatelessWidget {
+  final String label;
+  final String value;
+  final TextStyle? labelStyle;
+  final TextStyle? valueStyle;
+  final VoidCallback onTap;
+
+  const _DetailTile({
+    required this.label,
+    required this.value,
+    required this.labelStyle,
+    required this.valueStyle,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: labelStyle),
+          Text(value, style: valueStyle),
+        ],
+      ),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: onTap,
+    );
+  }
+}
+
+/// Widget spécialisé pour l'email avec overflow handling
+class _EmailTile extends StatelessWidget {
+  final String label;
+  final String value;
+  final TextStyle? labelStyle;
+  final TextStyle? valueStyle;
+
+  const _EmailTile({
+    required this.label,
+    required this.value,
+    required this.labelStyle,
+    required this.valueStyle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: labelStyle),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Text(
+              value,
+              style: valueStyle,
+              textAlign: TextAlign.right,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+          ),
+        ],
+      ),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: () {},
     );
   }
 }

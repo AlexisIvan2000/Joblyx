@@ -17,12 +17,15 @@ class LoginForm extends ConsumerStatefulWidget {
 }
 
 class _LoginFormState extends ConsumerState<LoginForm> {
+ 
+  static final _emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
-   bool _isLoading = false;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -94,7 +97,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 if (value == null || value.isEmpty) {
                   return t.t('login.no_email');
                 }
-                 if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                if (!_emailRegex.hasMatch(value)) {
                   return t.t('login.invalid_email');
                 }
                 return null;

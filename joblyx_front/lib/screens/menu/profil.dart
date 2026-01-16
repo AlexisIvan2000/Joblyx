@@ -40,7 +40,7 @@ class ProfilScreen extends StatelessWidget {
         child: Column(
           children: [
             GetPicture(),
-            SizedBox(height: 10.h),
+            const SizedBox(height: 10),
             PersonalDetails(),
           ],
         ),

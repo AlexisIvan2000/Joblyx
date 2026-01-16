@@ -72,7 +72,7 @@
     "profile_updated": "Profile updated successfully",
     "update_failed": "Failed to update profile.",
     "save": "Save",
-    "max_file_size": "Max file size: 60 MB",
+    "max_file_size": "Max file size: 15 MB",
     "file_type": "Supported file types: JPG, JPEG, PNG",
     "picture_updated": "Profile picture updated successfully",
     "picture_update_failed": "Failed to update profile picture."
@@ -111,9 +111,11 @@
     "unknown_error": "Unknown error occurred. Please try again.",
     "error": "Error",
     "bad_code": "The code entered is invalid.",
-    "otp_expired": "The code has expired"
-    
-    
+    "otp_expired": "The code has expired",
+    "invalid_file_type": "Invalid file type. Only JPG, JPEG, and PNG are allowed.",
+    "file_size_exceeded": "File size exceeds the 15 MB limit.",
+    "compression_failed": "Failed to compress the image. Please try again.",
+    "upload_failed": "Failed to upload the image. Please try again."
   },
 
   "code_verification": {
