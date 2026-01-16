@@ -1,0 +1,131 @@
+{
+  "intro":{
+    "first_introduction": "Propel your career with AI. Analyze the job market and optimize your profile in seconds.",
+    "second_introduction": "Discover the most in-demand skills in your area.",
+    "third_introduction": "Optimize your applications for ATS and recruiters.",
+    "fourth_introduction": "Prepare for interviews with AI-generated practice questions and feedback.",
+    "get_started": "Get Started",
+    "skip": "Skip",
+    "next": "Next"
+  },
+
+  "login" : {
+    "email": "Email",
+    "password": "Password",
+    "no_email": "Please enter your email",
+    "invalid_email": "Please enter a valid email",
+    "no_password": "Please enter your password",
+    "invalid_password": "Password must be at least 6 characters",
+    "forgot_password": "Forgot Password?",
+    "login": "Login",
+    "or": "Or",
+    "continue_with_linkedin": "Continue with LinkedIn",  
+    "no_account": "Don't have an account?",
+    "register": "Register",
+    "forgot_password_title": "Forgot Password",
+    "forgot_password_message": "Enter your email to receive a code to reset your password.",
+    "send": "Send"
+  },
+
+  "register": {
+    "first_name": "First name",
+    "last_name": "Last name",
+    "no_first_name": "Please enter your first name",
+    "no_last_name": "Please enter your last name",
+    "email": "Email",
+    "password": "Password",
+    "no_email": "Please enter your email",
+    "invalid_email": "Please enter a valid email",
+    "no_password": "Please enter your password",
+    "invalid_password": "Password must be at least 6 characters",
+    "sign_up": "Register",
+    "have_account": "Already have an account?",
+    "sign_in": "Login",
+    "confirm_email": "Check your email to continue your registration."  
+
+  },
+
+  "nav":{
+    "home": "Home",
+    "analysis": "Analysis",
+    "cv": "CV",
+    "profile": "Profile"
+  },
+
+  "home": {
+    "welcome": "Welcome"  
+  },
+
+  "profil":{
+    "your_profile": "Your Profile",
+    "member_since": "Member since",
+    "plan_type": "Subscription type",
+    "account_type": "Account type",
+    "delete_account": "Delete your account",
+    "upgrade_plan_title": "The premium plan is coming soon!",
+    "upgrade_plan_message": "We're finalizing our AI-powered career tools to boost your profile. Stay tuned.",
+    "got_it": "Got it",
+    "change_picture": "Change profile picture",
+    "take_photo": "Take a picture",
+    "choose_from_gallery": "Choose from gallery",
+    "me": "Me",
+    "profile_updated": "Profile updated successfully",
+    "update_failed": "Failed to update profile.",
+    "save": "Save",
+    "max_file_size": "Max file size: 60 MB",
+    "file_type": "Supported file types: JPG, JPEG, PNG",
+    "picture_updated": "Profile picture updated successfully",
+    "picture_update_failed": "Failed to update profile picture."
+
+
+  },
+
+  "settings":{
+    "title": "Settings",
+    "account_settings": "Account Settings",
+    "edit_profile": "Edit profile",
+    "change_password": "Change password",
+    "documentation":  "Documents",
+    "about": "About",
+    "privacy_policy": "Privacy policy",
+    "support": "Support",
+    "contact_us": "Contact us",
+    "faq": "FAQ",
+    "logout": "Logout",
+    "logout_confirmation_message": "Are you sure you want to logout?",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+
+  },
+
+  "err": {
+    "weak_password": "The password provided is too weak.",
+    "user_already_exists": "An account already exists for that email.",
+    "no_session_found": "No active session found. Please log in again.",
+    "session_expired": "Your session has expired. Please log in again.",
+    "same_password": "The new password is the same as the current password.",
+    "invalid_credentials": "Invalid email or password.",
+    "email_not_confirmed": "Email not confirmed. Please check your inbox.",
+    "over_email_send_rate_limit": "Too many requests. Please try again later.",
+    "user_not_found": "No user found for that email.",
+    "unknown_error": "Unknown error occurred. Please try again.",
+    "error": "Error",
+    "bad_code": "The code entered is invalid.",
+    "otp_expired": "The code has expired"
+    
+    
+  },
+
+  "code_verification": {
+    "title": "Code verification",
+    "message": "Enter the 6-digit code sent to your email.",
+    "code": "Code",
+    "small_message": "You don't receive the code?",
+    "resend_code": "Resend code",
+    "verify": "Verify",
+    "resent": "Code resent successfully.",
+    "success_message": "Your email has been successfully verified."
+  }
+
+
+}

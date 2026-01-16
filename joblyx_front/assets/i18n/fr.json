@@ -1,0 +1,126 @@
+{
+    "intro": {
+        "first_introduction": "Boostez votre carrière grâce à l’IA. Analysez le marché et optimisez votre profil en quelques secondes.",
+        "second_introduction": "Découvrez les compétences les plus demandées dans votre région.",
+        "third_introduction": "Optimisez vos candidatures pour les ATS et les recruteurs.",
+        "fourth_introduction": "Préparez vos entretiens avec des questions et retours générés par l’IA.",
+        "get_started": "Commencer",
+        "skip": "Passer",
+        "next": "Suivant"
+    },
+
+    "login": {
+        "email": "Email",
+        "password": "Mot de passe",
+        "no_email": "Veuillez entrer votre email",
+        "invalid_email": "Veuillez entrer un email valide",
+        "no_password": "Veuillez entrer votre mot de passe",
+        "invalid_password": "Le mot de passe doit contenir au moins 6 caractères",
+        "forgot_password": "Mot de passe oublié ?",
+        "login": "Se connecter",
+        "or": "Ou",
+        "continue_with_linkedin": "Continuer avec LinkedIn",
+        "no_account": "Vous n'avez pas de compte ?",
+        "register": "Inscrivez-vous",
+        "forgot_password_title": "Mot de passe oublié",
+        "forgot_password_message": "Entrez votre email pour recevoir un code de réinitialisation de mot de passe.",
+        "send": "Envoyer"
+    },
+
+   "register": {
+        "first_name": "Prénom",
+        "last_name": "Nom",
+        "no_first_name": "Entrer votre prénom",
+        "no_last_name": "Entrer votre nom",
+        "email": "Email",
+        "password": "Mot de passe",
+        "no_email": "Veuillez entrer votre email",
+        "invalid_email": "Veuillez entrer un email valide",
+        "no_password": "Veuillez entrer votre mot de passe",
+        "invalid_password": "Le mot de passe doit contenir au moins 6 caractères",
+        "sign_up": "S'inscrire",
+        "have_account": "Vous avez déjà un compte ?",
+        "sign_in": "Connectez-vous",
+        "confirm_email": "Vérifiez votre email pour continuer votre inscription.",
+        "confirm_email_title": "Vous n'avez pas reçu l'email ?",
+        "resend_code": "Renvoyer le code"
+    },
+    
+    "nav": {
+        "home": "Accueil",
+        "analysis": "Analyse",
+        "cv": "CV",
+        "profile": "Profil"
+    },
+    
+    "home": {
+        "welcome": "Bienvenue"
+    },
+
+    "profil": {
+        "your_profile": "Votre Profil",
+        "member_since": "Membre depuis",
+        "plan_type": "Type d'abonnement",
+        "account_type": "Type de compte",
+        "delete_account": "Supprimer votre compte",
+        "upgrade_plan_title": "Le plan premium arrive bientôt !",
+        "upgrade_plan_message": "Nous finalisons nos outils d'analyse par IA pour propulser votre carrière. Restez à l'écoute.",
+        "got_it": "Compris",
+        "change_picture": "Changer la photo de profil",
+        "take_photo": "Prendre une photo",
+        "choose_from_gallery": "Choisir depuis la galerie",
+        "me": "Moi",
+        "profile_updated": "Profil mis à jour avec succès",
+        "update_failed": "Échec de la mise à jour du profil.",
+        "save": "Enregistrer",
+        "max_file_size": "Taille maximale du fichier : 60 MB",
+        "file_type": "Types de fichiers autorisés: JPG, JPEG, PNG",
+        "picture_updated": "Photo de profil mise à jour avec succès",
+        "picture_update_failed": "Échec de la mise à jour de la photo de profil."
+
+    },
+
+    "settings": {
+        "title": "Paramètres",
+        "account_settings": "Paramètres du compte",
+        "edit_profile": "Modifier le profil",
+        "change_password": "Changer le mot de passe",
+        "documentation":  "Documentation",
+        "about": "À propos",
+        "privacy_policy": "Politique de confidentialité",
+        "support": "Support",
+        "contact_us": "Nous contacter",
+        "faq": "FAQ",
+        "logout": "Se déconnecter",
+        "logout_confirmation_message": "Êtes-vous sûr de vouloir vous déconnecter ?",
+        "cancel": "Annuler",
+        "confirm": "Confirmer"
+
+    },
+    "err": {
+    "weak_password": "Le mot de passe fourni est trop faible.",
+    "user_already_exists": "Un compte existe déjà pour cet email.",
+    "no_session_found": "Aucune session active trouvée. Veuillez vous reconnecter.",
+    "session_expired": "Votre session a expiré. Veuillez vous reconnecter.",
+    "same_password": "Le nouveau mot de passe est le même que l'ancien.",
+    "invalid_credentials": "Mail ou mot de passe invalide.",
+    "email_not_confirmed": "Email non confirmé. Veuillez vérifier votre boîte de réception.",
+    "over_email_send_rate_limit": "Trop de demandes. Veuillez réessayer plus tard.",
+    "user_not_found": "Aucun utilisateur trouvé pour cet email.",
+    "unknown_error": "Une erreur inconnue est survenue. Veuillez réessayer.",
+    "error": "Erreur",
+    "bad_code": "Le code entré est invalide.",
+    "otp_expired": "Le code a expiré"
+    
+  },
+
+    "code_verification": {
+        "title": "Vérification du code",
+        "message": "Entrez le code à 6 chiffres envoyé à votre email.",
+        "code": "Code",
+        "small_message": "Vous n'avez pas reçu le code ?",
+        "resend_code": "Renvoyer le code",
+        "verify": "Vérifier",
+        "success_message": "Votre email a été vérifié avec succès."
+    }
+}

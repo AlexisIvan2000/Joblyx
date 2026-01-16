@@ -1,0 +1,41 @@
+name: joblyx_front
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_dotenv: ^6.0.0
+  flutter_localizations:
+    sdk: flutter
+  flutter_riverpod: ^3.1.0
+  flutter_screenutil: ^5.9.3
+  go_router: ^17.0.1
+  google_fonts: ^7.0.0
+  image_picker: ^1.2.1
+  intl: ^0.20.2
+  supabase_flutter: ^2.12.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/rocket.png
+    - assets/images/discuss.png
+    - assets/images/document.png
+    - assets/images/location.png
+    - assets/images/logo.png
+    - assets/images/logo_1.png
+    - assets/images/linkeldin_logo.png
+    - assets/images/profile.png
+    - assets/i18n/en.json
+    - assets/i18n/fr.json
+    - .env
