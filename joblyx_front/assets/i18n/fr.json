@@ -24,7 +24,19 @@
         "register": "Inscrivez-vous",
         "forgot_password_title": "Mot de passe oublié",
         "forgot_password_message": "Entrez votre email pour recevoir un code de réinitialisation de mot de passe.",
-        "send": "Envoyer"
+        "send": "Envoyer",
+        "reset_password": "Réinitialiser le mot de passe",
+        "reset_password_message": "Entrez le code à 6 chiffres envoyé à votre email.",
+        "new_password": "Nouveau mot de passe",
+        "new_password_title": "Nouveau mot de passe",
+        "confirm_password": "Confirmer le mot de passe",
+        "no_confirm_password": "Veuillez confirmer votre mot de passe",
+        "passwords_not_match": "Les mots de passe ne correspondent pas",
+        "password_updated": "Mot de passe mis à jour avec succès",
+        "code_verified": "Code vérifié avec succès",
+        "cancel": "Annuler",
+        "verify": "Vérifier",
+        "confirm": "Confirmer"
     },
 
    "register": {
@@ -107,7 +119,7 @@
     "email_not_confirmed": "Email non confirmé. Veuillez vous réenregistrer.",
     "over_email_send_rate_limit": "Trop de demandes. Veuillez réessayer plus tard.",
     "user_not_found": "Aucun utilisateur trouvé pour cet email.",
-    "unknown_error": "Une erreur inconnue est survenue. Veuillez réessayer.",
+    "unknown_error": "Une erreur inconnue est survenue. Veuillez réessayer ou contacter le support.",
     "error": "Erreur",
     "bad_code": "Le code entré est invalide.",
     "otp_expired": "Le code a expiré",
@@ -121,9 +133,13 @@
         "title": "Vérification du code",
         "message": "Entrez le code à 6 chiffres envoyé à votre email.",
         "code": "Code",
+        "no_code": "Veuillez entrer le code",
+        "invalid_code": "Le code doit contenir 6 chiffres",
         "small_message": "Vous n'avez pas reçu le code ?",
         "resend_code": "Renvoyer le code",
         "verify": "Vérifier",
-        "success_message": "Votre email a été vérifié avec succès."
+        "resent": "Code renvoyé avec succès.",
+        "success_message": "Votre email a été vérifié avec succès.",
+        "send_message": "Un code de vérification a été envoyé à votre email."
     }
 }

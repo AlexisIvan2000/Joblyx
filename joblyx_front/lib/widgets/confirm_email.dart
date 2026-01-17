@@ -9,8 +9,9 @@ import 'package:joblyx_front/widgets/app_snackbar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void showConfirmEmailDialog(BuildContext context, WidgetRef ref, String email) {
+  final theme = Theme.of(context);
   final t = AppLocalizations.of(context);
-  final cs = Theme.of(context).colorScheme;
+  final cs = theme.colorScheme;
   final controller = TextEditingController();
   final teal300 = const Color(0xFF4DB6AC);
 
@@ -44,9 +45,7 @@ void showConfirmEmailDialog(BuildContext context, WidgetRef ref, String email) {
         backgroundColor: cs.surface,
         title: Text(
           t.t('code_verification.title'),
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(color: cs.onSurface),
+          style: theme.textTheme.titleMedium?.copyWith(color: cs.onSurface),
         ),
         contentPadding: EdgeInsets.all(16.w),
         actionsPadding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 16.h),
@@ -55,9 +54,9 @@ void showConfirmEmailDialog(BuildContext context, WidgetRef ref, String email) {
             children: [
               Text(
                 t.t('code_verification.message'),
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: cs.onSurfaceVariant,
+                ),
               ),
               SizedBox(height: 16.h),
               TextField(
@@ -90,9 +89,10 @@ void showConfirmEmailDialog(BuildContext context, WidgetRef ref, String email) {
                 children: [
                   Text(
                     t.t('code_verification.small_message'),
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodySmall?.copyWith(color: cs.onSurfaceVariant),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: cs.onSurfaceVariant,
+                    ),
+                    
                   ),
                   GestureDetector(
                     onTap: () async {
@@ -109,7 +109,7 @@ void showConfirmEmailDialog(BuildContext context, WidgetRef ref, String email) {
                     },
                     child: Text(
                       ' ${t.t('code_verification.resend_code')}',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      style: theme.textTheme.bodySmall?.copyWith(
                         color: cs.primary,
                         fontWeight: FontWeight.bold,
                       ),

@@ -11,7 +11,8 @@ class ProfilScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
     final t = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
@@ -22,9 +23,7 @@ class ProfilScreen extends StatelessWidget {
           children: [
             Text(
               t.t('profil.your_profile'),
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             IconButton(
               onPressed: () {
@@ -39,9 +38,9 @@ class ProfilScreen extends StatelessWidget {
         padding: EdgeInsets.all(20.w),
         child: Column(
           children: [
-            GetPicture(),
+            const GetPicture(),
             const SizedBox(height: 10),
-            PersonalDetails(),
+            const PersonalDetails(),
           ],
         ),
       ),

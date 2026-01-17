@@ -19,12 +19,24 @@
     "forgot_password": "Forgot Password?",
     "login": "Login",
     "or": "Or",
-    "continue_with_linkedin": "Continue with LinkedIn",  
+    "continue_with_linkedin": "Continue with LinkedIn",
     "no_account": "Don't have an account?",
     "register": "Register",
     "forgot_password_title": "Forgot Password",
     "forgot_password_message": "Enter your email to receive a code to reset your password.",
-    "send": "Send"
+    "send": "Send",
+    "reset_password": "Reset password",
+    "reset_password_message": "Enter the 6-digit code sent to your email.",
+    "new_password": "New password",
+    "new_password_title": "New Password",
+    "confirm_password": "Confirm password",
+    "no_confirm_password": "Please confirm your password",
+    "passwords_not_match": "Passwords do not match",
+    "password_updated": "Password updated successfully",
+    "code_verified": "Code verified successfully",
+    "cancel": "Cancel",
+    "verify": "Verify",
+    "confirm": "Confirm"
   },
 
   "register": {
@@ -108,7 +120,7 @@
     "email_not_confirmed": "Email not confirmed. Signup again.",
     "over_email_send_rate_limit": "Too many requests. Please try again later.",
     "user_not_found": "No user found for that email.",
-    "unknown_error": "Unknown error occurred. Please try again.",
+    "unknown_error": "Unknown error occurred. Please try again or contact support.",
     "error": "Error",
     "bad_code": "The code entered is invalid.",
     "otp_expired": "The code has expired",
@@ -122,11 +134,14 @@
     "title": "Code verification",
     "message": "Enter the 6-digit code sent to your email.",
     "code": "Code",
+    "no_code": "Please enter the code",
+    "invalid_code": "Code must be 6 digits",
     "small_message": "You don't receive the code?",
     "resend_code": "Resend code",
     "verify": "Verify",
     "resent": "Code resent successfully.",
-    "success_message": "Your email has been successfully verified."
+    "success_message": "Your email has been successfully verified.",
+    "send_message": "A verification code has been sent to your email."
   }
 
 

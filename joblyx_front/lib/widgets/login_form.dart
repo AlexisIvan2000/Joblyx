@@ -142,7 +142,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               alignment: Alignment.centerRight,
               child: GestureDetector(
                 onTap: () {
-                  showForgotPasswordDialog(context);
+                  showPasswordResetDialog(context, ref, _emailController.text.trim());
                 },
                 child: Text(
                   t.t('login.forgot_password'),

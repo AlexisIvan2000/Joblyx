@@ -89,6 +89,60 @@ class AuthService {
       throw Exception('Error resending confirmation email: $e');
     }
   }
+  Future<void> resendResetPasswordEmail(String email) async {
+    try {
+      // Utiliser resetPasswordForEmail au lieu de resend pour le recovery
+      await _supabase.auth.resetPasswordForEmail(email);
+    } on AuthException catch (e) {
+      throw AuthFailure(_mapAuthException(e.code));
+    } catch (e) {
+      throw AuthFailure('unknown_error');
+    }
+  }
+  // Send password reset email
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await _supabase.auth.resetPasswordForEmail(email);
+    } on AuthException catch (e) {
+      throw AuthFailure(_mapAuthException(e.code));
+    } catch (e) {
+      throw Exception('Unknown error');
+    }
+  }
+  
+  // Mettre à jour le mot de passe (après vérification OTP)
+  Future<void> updatePassword(String newPassword) async {
+    try {
+      await _supabase.auth.updateUser(
+        UserAttributes(password: newPassword),
+      );
+    } on AuthException catch (e) {
+      throw AuthFailure(_mapAuthException(e.code));
+    } catch (e) {
+      throw AuthFailure('unknown_error');
+    }
+  }
+
+  Future<void> resetPasswordWithOtp({
+    required String email,
+    required String token,
+    required String newPassword,
+  }) async {
+    try {
+      await _supabase.auth.verifyOTP(
+        email: email,
+        token: token,
+        type: OtpType.recovery,
+      );
+      await _supabase.auth.updateUser(
+        UserAttributes(password: newPassword),
+      );
+    }on AuthException catch (e) {
+      throw AuthFailure(_mapAuthException(e.code));
+    } catch (e) {
+      throw Exception('Unknown error');
+    }
+  }
 
   String _mapAuthException(String? code) {
     switch (code) {
