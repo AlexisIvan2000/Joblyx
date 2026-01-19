@@ -5,6 +5,7 @@ import 'package:joblyx_front/providers/user_provider.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
 import 'package:joblyx_front/widgets/profil/edit_field_sheet.dart';
 import 'package:joblyx_front/widgets/profil/change_email.dart';
+import 'package:joblyx_front/widgets/profil/change_password.dart';
 
 class PersonalDetails extends ConsumerWidget {
   const PersonalDetails({super.key});
@@ -84,7 +85,7 @@ class PersonalDetails extends ConsumerWidget {
                 value: '***********',
                 labelStyle: labelStyle,
                 valueStyle: valueStyle,
-                onTap: () {},
+                onTap: () => showChangePasswordSheet(context),
               ),
               _buildDivider(),
               ListTile(

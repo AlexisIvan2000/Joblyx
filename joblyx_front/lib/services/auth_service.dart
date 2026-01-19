@@ -5,7 +5,11 @@ class AuthService {
   final SupabaseClient _supabase = Supabase.instance.client;
 
   // Champs autorisés pour la mise à jour du profil
-  static const _allowedProfileFields = ['first_name', 'last_name'];
+  static const _allowedProfileFields = [
+    'first_name',
+    'last_name',
+    'profile_picture',
+  ];
 
   // User Registration
   Future<AuthResponse> registerUser(
@@ -154,7 +158,7 @@ class AuthService {
         password: password,
       );
       // Update email
-      await _supabase.auth.updateUser(UserAttributes(email: newEmail));    
+      await _supabase.auth.updateUser(UserAttributes(email: newEmail));
     } on AuthException catch (e) {
       throw AuthFailure(_mapAuthException(e.code));
     } catch (e) {
@@ -170,6 +174,30 @@ class AuthService {
       throw AuthFailure(_mapAuthException(e.code));
     } catch (e) {
       throw AuthFailure('resend_failed');
+    }
+  }
+
+  // Change password with current password verification
+  Future<void> changePassword(
+    String currentPassword,
+    String newPassword,
+  ) async {
+    final user = _supabase.auth.currentUser;
+    if (user == null || user.email == null) {
+      throw AuthFailure('user_not_logged_in');
+    }
+
+    try {
+      await _supabase.auth.signInWithPassword(
+        email: user.email!,
+        password: currentPassword,
+      );
+
+      await _supabase.auth.updateUser(UserAttributes(password: newPassword));
+    } on AuthException catch (e) {
+      throw AuthFailure(_mapAuthException(e.code));
+    } catch (e) {
+      throw AuthFailure('unknown_error');
     }
   }
 

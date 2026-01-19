@@ -121,7 +121,7 @@
     "no_session_found": "No active session found. Please log in again.",
     "session_expired": "Your session has expired. Please log in again.",
     "same_password": "The new password is the same as the current password.",
-    "invalid_credentials": "Invalid email or password.",
+    "invalid_credentials": "Invalid credential",
     "email_not_confirmed": "Email not confirmed. Signup again.",
     "over_email_send_rate_limit": "Too many requests. Please try again later.",
     "user_not_found": "No user found for that email.",
