@@ -112,7 +112,12 @@
         "logout": "Se déconnecter",
         "logout_confirmation_message": "Êtes-vous sûr de vouloir vous déconnecter ?",
         "cancel": "Annuler",
-        "confirm": "Confirmer"
+        "confirm": "Confirmer",
+        "system": "Système",
+        "light": "Clair",
+        "dark": "Sombre",
+        "french": "Français",
+        "english": "Anglais"
 
     },
     "err": {

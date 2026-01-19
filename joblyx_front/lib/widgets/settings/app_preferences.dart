@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
+import 'package:joblyx_front/widgets/settings/app_color_mode.dart';
+import 'package:joblyx_front/widgets/settings/app_language.dart';
 
 class AppPreferences extends StatelessWidget   {
   const AppPreferences({super.key});
@@ -20,8 +22,8 @@ class AppPreferences extends StatelessWidget   {
               t.t('settings.color_mode'),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
-            trailing: Icon(Icons.chevron_right),
-            onTap: () {},
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => showColorModeSheet(context),
           ),
           Divider(height: 1.h, color:  Colors.grey[400]),
           ListTile(
@@ -29,8 +31,8 @@ class AppPreferences extends StatelessWidget   {
               t.t('settings.change_language'),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
-            trailing: Icon(Icons.chevron_right),
-            onTap: () {},
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => showLanguageSheet(context),
           ),
         ],
       ),

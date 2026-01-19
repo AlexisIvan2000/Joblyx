@@ -309,8 +309,9 @@ class _PasswordResetDialogState extends ConsumerState<_PasswordResetDialog> {
             },
           ),
           SizedBox(height: 12.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Wrap(
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               Text(
                 t.t('code_verification.small_message'),
@@ -318,7 +319,6 @@ class _PasswordResetDialogState extends ConsumerState<_PasswordResetDialog> {
                   color: cs.onSurfaceVariant,
                 ),
               ),
-              SizedBox(width: 4.w),
               TextButton(
                 onPressed: (_isResending || _isLoading) ? null : _resendCode,
                 style: TextButton.styleFrom(

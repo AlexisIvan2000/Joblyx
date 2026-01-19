@@ -111,7 +111,12 @@
     "logout": "Logout",
     "logout_confirmation_message": "Are you sure you want to logout?",
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark",
+    "french": "French",
+    "english": "English"
 
   },
 
