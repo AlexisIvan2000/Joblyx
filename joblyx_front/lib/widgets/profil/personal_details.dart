@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:joblyx_front/providers/user_provider.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
 import 'package:joblyx_front/widgets/profil/edit_field_sheet.dart';
+import 'package:joblyx_front/widgets/profil/change_email.dart';
 
 class PersonalDetails extends ConsumerWidget {
   const PersonalDetails({super.key});
@@ -75,6 +76,7 @@ class PersonalDetails extends ConsumerWidget {
                 value: user.email.isNotEmpty ? user.email : 'user@gmail.com',
                 labelStyle: labelStyle,
                 valueStyle: valueStyle,
+                onTap: () => showChangeEmailSheet(context),
               ),
               _buildDivider(),
               _DetailTile(
@@ -166,12 +168,14 @@ class _EmailTile extends StatelessWidget {
   final String value;
   final TextStyle? labelStyle;
   final TextStyle? valueStyle;
+  final VoidCallback onTap;
 
   const _EmailTile({
     required this.label,
     required this.value,
     required this.labelStyle,
     required this.valueStyle,
+    required this.onTap,
   });
 
   @override
@@ -194,7 +198,7 @@ class _EmailTile extends StatelessWidget {
         ],
       ),
       trailing: const Icon(Icons.chevron_right),
-      onTap: () {},
+      onTap: onTap,
     );
   }
 }

@@ -6,69 +6,58 @@ import 'package:joblyx_front/providers/auth_service_provider.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
 import 'package:joblyx_front/services/auth_exception.dart';
 import 'package:joblyx_front/widgets/app_snackbar.dart';
-import 'package:joblyx_front/widgets/reset_password.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-void showPasswordResetDialog(
-  BuildContext context,
-  WidgetRef ref,
-  String email,
-) {
-  showDialog(
+void showChangeEmailSheet(BuildContext context) {
+  showModalBottomSheet(
     context: context,
-    barrierDismissible: false,
-    builder: (_) => _PasswordResetDialog(ref: ref, initialEmail: email),
+    isScrollControlled: true,
+    backgroundColor: Theme.of(context).colorScheme.surface,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+    ),
+    builder: (_) => const ChangeEmailSheet(),
   );
 }
 
-class _PasswordResetDialog extends ConsumerStatefulWidget {
-  final WidgetRef ref;
-  final String initialEmail;
-
-  const _PasswordResetDialog({required this.ref, required this.initialEmail});
+class ChangeEmailSheet extends ConsumerStatefulWidget {
+  const ChangeEmailSheet({super.key});
 
   @override
-  ConsumerState<_PasswordResetDialog> createState() =>
-      _PasswordResetDialogState();
+  ConsumerState<ChangeEmailSheet> createState() => _ChangeEmailSheetState();
 }
 
-class _PasswordResetDialogState extends ConsumerState<_PasswordResetDialog> {
+class _ChangeEmailSheetState extends ConsumerState<ChangeEmailSheet> {
   static final _emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-
-  late final TextEditingController _emailController;
-  late final TextEditingController _codeController;
 
   final _emailFormKey = GlobalKey<FormState>();
   final _codeFormKey = GlobalKey<FormState>();
 
+  final _passwordController = TextEditingController();
+  final _newEmailController = TextEditingController();
+  final _codeController = TextEditingController();
+
   AutovalidateMode _emailAutovalidateMode = AutovalidateMode.disabled;
   AutovalidateMode _codeAutovalidateMode = AutovalidateMode.disabled;
 
+  bool _isPasswordVisible = false;
   bool _isLoading = false;
   bool _isResending = false;
-  bool _isEmailSent = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _emailController = TextEditingController(text: widget.initialEmail);
-    _codeController = TextEditingController();
-  }
+  bool _isCodeStep = false;
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _passwordController.dispose();
+    _newEmailController.dispose();
     _codeController.dispose();
     super.dispose();
   }
 
-  /// Étape 1: Envoyer l'email de reset
-  Future<void> _sendEmail() async {
+  /// Étape 1: Envoyer la demande de changement d'email
+  Future<void> _submitEmail() async {
     final isValid = _emailFormKey.currentState?.validate() ?? false;
     if (!isValid) {
-      setState(() {
-        _emailAutovalidateMode = AutovalidateMode.onUserInteraction;
-      });
+      setState(() => _emailAutovalidateMode = AutovalidateMode.onUserInteraction);
       return;
     }
 
@@ -77,9 +66,10 @@ class _PasswordResetDialogState extends ConsumerState<_PasswordResetDialog> {
     setState(() => _isLoading = true);
 
     try {
-      await widget.ref
-          .read(authServiceProvider)
-          .sendPasswordResetEmail(_emailController.text.trim());
+      await ref.read(authServiceProvider).changeEmail(
+            _passwordController.text,
+            _newEmailController.text.trim(),
+          );
 
       if (mounted) {
         final t = AppLocalizations.of(context);
@@ -89,7 +79,7 @@ class _PasswordResetDialogState extends ConsumerState<_PasswordResetDialog> {
           duration: const Duration(seconds: 3),
         );
         setState(() {
-          _isEmailSent = true;
+          _isCodeStep = true;
           _isLoading = false;
         });
       }
@@ -106,14 +96,14 @@ class _PasswordResetDialogState extends ConsumerState<_PasswordResetDialog> {
     }
   }
 
-  /// Renvoyer le code
+  /// Renvoyer le code de confirmation
   Future<void> _resendCode() async {
     setState(() => _isResending = true);
 
     try {
-      await widget.ref
+      await ref
           .read(authServiceProvider)
-          .sendPasswordResetEmail(_emailController.text.trim());
+          .resendEmailChangeConfirmation(_newEmailController.text.trim());
 
       if (mounted) {
         final t = AppLocalizations.of(context);
@@ -122,7 +112,11 @@ class _PasswordResetDialogState extends ConsumerState<_PasswordResetDialog> {
     } catch (e) {
       if (mounted) {
         final t = AppLocalizations.of(context);
-        AppSnackBar.showError(context, t.t('err.unknown_error'));
+        if (e is AuthFailure) {
+          AppSnackBar.showError(context, t.t('err.${e.code}'));
+        } else {
+          AppSnackBar.showError(context, t.t('err.unknown_error'));
+        }
       }
     } finally {
       if (mounted) {
@@ -135,9 +129,7 @@ class _PasswordResetDialogState extends ConsumerState<_PasswordResetDialog> {
   Future<void> _verifyCode() async {
     final isValid = _codeFormKey.currentState?.validate() ?? false;
     if (!isValid) {
-      setState(() {
-        _codeAutovalidateMode = AutovalidateMode.onUserInteraction;
-      });
+      setState(() => _codeAutovalidateMode = AutovalidateMode.onUserInteraction);
       return;
     }
 
@@ -145,16 +137,20 @@ class _PasswordResetDialogState extends ConsumerState<_PasswordResetDialog> {
     setState(() => _isLoading = true);
 
     try {
-      await widget.ref.read(authServiceProvider).verifyOTP(
-            _emailController.text.trim(),
+      await ref.read(authServiceProvider).verifyOTP(
+            _newEmailController.text.trim(),
             _codeController.text.trim(),
-            OtpType.recovery,
+            OtpType.emailChange,
           );
 
       if (mounted) {
+        final t = AppLocalizations.of(context);
+        AppSnackBar.showSuccess(
+          context,
+          t.t('code_verification.success_message'),
+          duration: const Duration(seconds: 3),
+        );
         Navigator.of(context).pop();
-       
-        showResetPasswordConfirmDialog(context, widget.ref);
       }
     } catch (e) {
       if (mounted) {
@@ -175,60 +171,23 @@ class _PasswordResetDialogState extends ConsumerState<_PasswordResetDialog> {
     final cs = theme.colorScheme;
     final t = AppLocalizations.of(context);
 
-    return AlertDialog(
-      backgroundColor: cs.surface,
-      title: Text(
-        t.t('login.forgot_password_title'),
-        style: theme.textTheme.titleMedium?.copyWith(color: cs.onSurface),
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom + 16.h,
+        left: 16.w,
+        right: 16.w,
+        top: 16.h,
       ),
-      contentPadding: EdgeInsets.all(16.w),
-      actionsPadding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 16.h),
-      content: AnimatedSwitcher(
+      child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
-        child: _isEmailSent
+        child: _isCodeStep
             ? _buildCodeStep(theme, cs, t)
             : _buildEmailStep(theme, cs, t),
       ),
-      actions: [
-        Row(
-          children: [
-            Expanded(
-              child: OutlinedButton(
-                onPressed: _isLoading
-                    ? null
-                    : () => Navigator.of(context).pop(),
-                child: Text(t.t('login.cancel')),
-              ),
-            ),
-            SizedBox(width: 12.w),
-            Expanded(
-              child: FilledButton(
-                onPressed: _isLoading
-                    ? null
-                    : (_isEmailSent ? _verifyCode : _sendEmail),
-                child: _isLoading
-                    ? SizedBox(
-                        height: 20.h,
-                        width: 20.w,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: cs.onPrimary,
-                        ),
-                      )
-                    : Text(
-                        _isEmailSent
-                            ? t.t('login.verify')
-                            : t.t('login.send'),
-                      ),
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 
-  /// Étape 1: Formulaire email
+  /// Étape 1: Formulaire mot de passe + nouvel email
   Widget _buildEmailStep(ThemeData theme, ColorScheme cs, AppLocalizations t) {
     return Form(
       key: _emailFormKey,
@@ -236,40 +195,99 @@ class _PasswordResetDialogState extends ConsumerState<_PasswordResetDialog> {
       child: Column(
         key: const ValueKey('email_step'),
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            t.t('login.forgot_password_message'),
-            style: theme.textTheme.bodyMedium,
+            t.t('profil.change_email_title'),
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 10.h),
+          Text(
+            t.t('profil.change_email_message'),
+            style: theme.textTheme.bodyMedium?.copyWith(color: cs.onSurface),
           ),
           SizedBox(height: 16.h),
           TextFormField(
-            controller: _emailController,
-            textInputAction: TextInputAction.done,
-            keyboardType: TextInputType.emailAddress,
+            controller: _passwordController,
+            obscureText: !_isPasswordVisible,
             enabled: !_isLoading,
-            onFieldSubmitted: (_) => _sendEmail(),
+            textInputAction: TextInputAction.next,
             decoration: InputDecoration(
-              labelText: t.t('login.email'),
+              labelText: t.t('profil.your_password'),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.r),
+              ),
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                ),
+                onPressed: () {
+                  setState(() => _isPasswordVisible = !_isPasswordVisible);
+                },
+              ),
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return t.t('login.no_password');
+              }
+              if (value.length < 6) {
+                return t.t('login.invalid_password');
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: 12.h),
+          TextFormField(
+            controller: _newEmailController,
+            enabled: !_isLoading,
+            keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.done,
+            onFieldSubmitted: (_) => _submitEmail(),
+            decoration: InputDecoration(
+              labelText: t.t('profil.new_email'),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20.r),
               ),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return t.t('login.no_email');
+                return t.t('register.no_email');
               }
               if (!_emailRegex.hasMatch(value)) {
-                return t.t('login.invalid_email');
+                return t.t('register.invalid_email');
               }
               return null;
             },
+          ),
+          SizedBox(height: 20.h),
+          SizedBox(
+            width: double.infinity,
+            height: 48.h,
+            child: FilledButton(
+              onPressed: _isLoading ? null : _submitEmail,
+              child: _isLoading
+                  ? SizedBox(
+                      height: 20.h,
+                      width: 20.w,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: cs.onPrimary,
+                      ),
+                    )
+                  : Text(
+                      t.t('profil.confirm'),
+                      style: const TextStyle(fontSize: 16),
+                    ),
+            ),
           ),
         ],
       ),
     );
   }
 
-  /// Étape 2: Formulaire code OTP
+  /// Étape 2: Formulaire code de vérification
   Widget _buildCodeStep(ThemeData theme, ColorScheme cs, AppLocalizations t) {
     return Form(
       key: _codeFormKey,
@@ -277,10 +295,18 @@ class _PasswordResetDialogState extends ConsumerState<_PasswordResetDialog> {
       child: Column(
         key: const ValueKey('code_step'),
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            t.t('login.reset_password_message'),
-            style: theme.textTheme.bodyMedium,
+            t.t('code_verification.title'),
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 10.h),
+          Text(
+            t.t('code_verification.message'),
+            style: theme.textTheme.bodyMedium?.copyWith(color: cs.onSurface),
           ),
           SizedBox(height: 16.h),
           TextFormField(
@@ -344,6 +370,27 @@ class _PasswordResetDialogState extends ConsumerState<_PasswordResetDialog> {
                       ),
               ),
             ],
+          ),
+          SizedBox(height: 20.h),
+          SizedBox(
+            width: double.infinity,
+            height: 48.h,
+            child: FilledButton(
+              onPressed: _isLoading ? null : _verifyCode,
+              child: _isLoading
+                  ? SizedBox(
+                      height: 20.h,
+                      width: 20.w,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: cs.onPrimary,
+                      ),
+                    )
+                  : Text(
+                      t.t('code_verification.verify'),
+                      style: const TextStyle(fontSize: 16),
+                    ),
+            ),
           ),
         ],
       ),

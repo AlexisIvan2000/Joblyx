@@ -88,7 +88,12 @@
         "max_file_size": "Taille maximale du fichier : 15 MB",
         "file_type": "Types de fichiers autorisés: JPG, JPEG, PNG",
         "picture_updated": "Photo de profil mise à jour avec succès",
-        "picture_update_failed": "Échec de la mise à jour de la photo de profil."
+        "picture_update_failed": "Échec de la mise à jour de la photo de profil.",
+        "change_email_title": "Changer l'adresse email",
+        "change_email_message": "Entrez les détails ci-dessous pour recevoir votre code de confirmation.",
+        "your_password": "Votre mot de passe",
+        "new_email": "Nouvelle adresse email",
+        "confirm": "Confirmer"
 
     },
 
@@ -123,10 +128,18 @@
     "error": "Erreur",
     "bad_code": "Le code entré est invalide.",
     "otp_expired": "Le code a expiré",
+    "email_exists": "Cette adresse email existe déjà dans notre système.",
+    "user_not_logged_in": "L'utilisateur n'est pas connecté.",
+    "same_email": "Le nouvel email est le même que l'email actuel.",
+    "wrong_password": "Votre mot de passe est incorrect.",
     "invalid_file_type": "Type de fichier invalide. Seuls JPG, JPEG et PNG sont autorisés.",
     "file_size_exceeded": "La taille du fichier dépasse la limite de 15 MB.",
     "compression_failed": "Échec de la compression de l'image. Veuillez réessayer.",
-    "upload_failed": "Échec de l'envoi de l'image. Veuillez réessayer."
+    "upload_failed": "Échec de l'envoi de l'image. Veuillez réessayer.",
+    "resend_failed": "Échec du renvoi du code. Veuillez réessayer ou contacter le support.",
+    "logout_failed": "Échec de la déconnexion. Veuillez réessayer.",
+    "invalid_field": "Champ invalide.",
+    "update_failed": "Échec de la mise à jour. Veuillez réessayer."
   },
 
     "code_verification": {

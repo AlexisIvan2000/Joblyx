@@ -87,7 +87,12 @@
     "max_file_size": "Max file size: 15 MB",
     "file_type": "Supported file types: JPG, JPEG, PNG",
     "picture_updated": "Profile picture updated successfully",
-    "picture_update_failed": "Failed to update profile picture."
+    "picture_update_failed": "Failed to update profile picture.",
+    "change_email_title": "Change email address",
+    "change_email_message": "Enter the details below to receive your confirmation code.",
+    "your_password": "Your password",
+    "new_email": "New email address",
+    "confirm": "Confirm"
 
 
   },
@@ -124,10 +129,18 @@
     "error": "Error",
     "bad_code": "The code entered is invalid.",
     "otp_expired": "The code has expired",
+    "email_exists": "This email address already exists in our system.",
+    "user_not_logged_in": "User is not logged in.",
+    "same_email": "The new email is the same as the current email.",
+    "wrong_password": "Your password is incorrect.",
     "invalid_file_type": "Invalid file type. Only JPG, JPEG, and PNG are allowed.",
     "file_size_exceeded": "File size exceeds the 15 MB limit.",
     "compression_failed": "Failed to compress the image. Please try again.",
-    "upload_failed": "Failed to upload the image. Please try again."
+    "upload_failed": "Failed to upload the image. Please try again.",
+    "resend_failed": "Failed to resend the code. Please try again or contact support.",
+    "logout_failed": "Failed to logout. Please try again.",
+    "invalid_field": "Invalid field.",
+    "update_failed": "Failed to update. Please try again."
   },
 
   "code_verification": {
