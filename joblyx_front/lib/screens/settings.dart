@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
-import 'package:joblyx_front/widgets/settings/account_settings.dart';
+import 'package:joblyx_front/widgets/settings/app_preferences.dart';
 import 'package:joblyx_front/widgets/settings/documents.dart';
 import 'package:joblyx_front/widgets/settings/log_out.dart';
 import 'package:joblyx_front/widgets/settings/support.dart';
@@ -31,13 +31,13 @@ class SettingsScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              t.t('settings.account_settings'),
+              t.t('settings.app_preferences'),
               style: Theme.of(
                 context,
               ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 2),
-            const AccountSettings(),
+            const AppPreferences(),
             const SizedBox(height: 2),
             Text(
               t.t('settings.documentation'),

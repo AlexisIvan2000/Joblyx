@@ -99,8 +99,9 @@
 
     "settings": {
         "title": "Paramètres",
-        "account_settings": "Paramètres du compte",
-        "edit_profile": "Modifier le profil",
+        "app_preferences": "Préférences de l'application",
+        "color_mode": "Mode de couleur",
+        "change_language": "Changer la langue",
         "change_password": "Changer le mot de passe",
         "documentation":  "Documentation",
         "about": "À propos",

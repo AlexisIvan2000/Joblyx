@@ -183,11 +183,18 @@ class _EmailTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: labelStyle),
+          Flexible(
+            flex: 1,
+            child: Text(
+              label,
+              style: labelStyle,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
           SizedBox(width: 12.w),
-          Expanded(
+          Flexible(
+            flex: 2,
             child: Text(
               value,
               style: valueStyle,

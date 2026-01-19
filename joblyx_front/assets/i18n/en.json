@@ -99,9 +99,9 @@
 
   "settings":{
     "title": "Settings",
-    "account_settings": "Account Settings",
-    "edit_profile": "Edit profile",
-    "change_password": "Change password",
+    "app_preferences": "App preferences",
+    "color_mode": "Color mode",
+    "change_language": "Change language",
     "documentation":  "Documents",
     "about": "About",
     "privacy_policy": "Privacy policy",

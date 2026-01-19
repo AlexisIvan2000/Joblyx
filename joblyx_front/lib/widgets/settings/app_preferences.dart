@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
 
-class AccountSettings extends StatelessWidget   {
-  const AccountSettings({super.key});
+class AppPreferences extends StatelessWidget   {
+  const AppPreferences({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class AccountSettings extends StatelessWidget   {
         children: [
           ListTile(
             title: Text(
-              t.t('settings.edit_profile'),
+              t.t('settings.color_mode'),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             trailing: Icon(Icons.chevron_right),
@@ -26,7 +26,7 @@ class AccountSettings extends StatelessWidget   {
           Divider(height: 1.h, color:  Colors.grey[400]),
           ListTile(
             title: Text(
-              t.t('settings.change_password'),
+              t.t('settings.change_language'),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             trailing: Icon(Icons.chevron_right),
