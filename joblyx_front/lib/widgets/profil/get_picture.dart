@@ -37,8 +37,7 @@ class GetPicture extends ConsumerWidget {
           Localizations.localeOf(context).languageCode,
         ).format(pictureData.createdAt!);
 
-        return Card(
-          color: Colors.grey[300],
+        return Card.filled(
           margin: EdgeInsets.symmetric(vertical: 16.h),
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 15.h),

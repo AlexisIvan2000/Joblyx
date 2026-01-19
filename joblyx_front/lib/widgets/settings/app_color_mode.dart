@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:joblyx_front/providers/provider_theme_color.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
 
 void showColorModeSheet(BuildContext context) {
@@ -9,28 +11,25 @@ void showColorModeSheet(BuildContext context) {
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
     ),
-    builder: (_) => const AppColorMode(),
+    builder: (ctx) => const AppColorMode(),
   );
 }
 
-class AppColorMode extends StatefulWidget {
+class AppColorMode extends ConsumerWidget {
   const AppColorMode({super.key});
 
   @override
-  State<AppColorMode> createState() => _AppColorModeState();
-}
-
-class _AppColorModeState extends State<AppColorMode> {
-  String _selectedMode = 'system';
-
-  void _onModeChanged(String value) {
-    setState(() => _selectedMode = value);
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final t = AppLocalizations.of(context);
+    final currentMode = ref.watch(themeModeProvider);
+
+    void onModeChanged(ThemeMode? mode) {
+      if (mode != null) {
+        ref.read(themeModeProvider.notifier).setThemeMode(mode);
+        Navigator.pop(context);
+      }
+    }
 
     return Padding(
       padding: EdgeInsets.only(
@@ -50,52 +49,28 @@ class _AppColorModeState extends State<AppColorMode> {
             ),
           ),
           SizedBox(height: 12.h),
-          RadioGroup<String>(
-            groupValue: _selectedMode,
-            onChanged: (value) => _onModeChanged(value!),
+          RadioGroup<ThemeMode>(
+            groupValue: currentMode,
+            onChanged: onModeChanged,
             child: Column(
               children: [
-                _ColorModeOption(
-                  title: t.t('settings.system'),
-                  value: 'system',
-                  onTap: _onModeChanged,
+                RadioListTile<ThemeMode>(
+                  title: Text(t.t('settings.system')),
+                  value: ThemeMode.system,
                 ),
-                _ColorModeOption(
-                  title: t.t('settings.light'),
-                  value: 'light',
-                  onTap: _onModeChanged,
+                RadioListTile<ThemeMode>(
+                  title: Text(t.t('settings.light')),
+                  value: ThemeMode.light,
                 ),
-                _ColorModeOption(
-                  title: t.t('settings.dark'),
-                  value: 'dark',
-                  onTap: _onModeChanged,
+                RadioListTile<ThemeMode>(
+                  title: Text(t.t('settings.dark')),
+                  value: ThemeMode.dark,
                 ),
               ],
             ),
           ),
         ],
       ),
-    );
-  }
-}
-
-class _ColorModeOption extends StatelessWidget {
-  final String title;
-  final String value;
-  final ValueChanged<String> onTap;
-
-  const _ColorModeOption({
-    required this.title,
-    required this.value,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(title),
-      trailing: Radio<String>(value: value),
-      onTap: () => onTap(value),
     );
   }
 }

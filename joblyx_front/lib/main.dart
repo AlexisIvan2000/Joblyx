@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
 import 'package:joblyx_front/routers/app_router.dart';
+import 'package:joblyx_front/providers/provider_theme_color.dart';
+import 'package:joblyx_front/theme/theme_color.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -24,15 +26,9 @@ class MainApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final lightTheme = ThemeData(
-      useMaterial3: true,
-      textTheme: GoogleFonts.latoTextTheme(),
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.teal[300]!,
-        surface: Colors.white,
-        brightness: Brightness.light,
-      ),
-    );
+    final themeMode = ref.watch(themeModeProvider);
+    final themeColor = ThemeColor();
+
     return ScreenUtilInit(
       designSize: const Size(360, 690),
       minTextAdapt: true,
@@ -41,9 +37,10 @@ class MainApp extends ConsumerWidget {
         return MaterialApp.router(
           debugShowCheckedModeBanner: false,
           title: 'Joblyx',
-          theme: lightTheme,
+          theme: themeColor.lightTheme,
+          darkTheme: themeColor.darkTheme,
+          themeMode: themeMode,
           routerConfig: appRouter,
-
           supportedLocales: AppLocalizations.supportedLocales,
           localizationsDelegates: const [
             AppLocalizationsDelegate(),

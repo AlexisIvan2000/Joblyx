@@ -39,8 +39,7 @@ class PersonalDetails extends ConsumerWidget {
         );
         final valueStyle = textTheme.bodyMedium;
 
-        return Card(
-          color: Colors.grey[300],
+        return Card.filled(         
           margin: EdgeInsets.symmetric(vertical: 16.h),
           child: Column(
             children: [

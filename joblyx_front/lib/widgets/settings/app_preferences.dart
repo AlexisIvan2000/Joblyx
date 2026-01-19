@@ -12,8 +12,7 @@ class AppPreferences extends StatelessWidget   {
     final t = AppLocalizations.of(context);
     // final cs = Theme.of(context).colorScheme;
     
-    return Card(
-      color: Colors.grey[300],
+    return Card.filled(    
       margin: EdgeInsets.symmetric(vertical: 16.h),
       child: Column(
         children: [
