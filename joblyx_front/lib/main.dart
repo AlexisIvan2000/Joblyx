@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
 import 'package:joblyx_front/routers/app_router.dart';
 import 'package:joblyx_front/providers/provider_theme_color.dart';
+import 'package:joblyx_front/providers/provider_language.dart';
 import 'package:joblyx_front/theme/theme_color.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -27,6 +28,7 @@ class MainApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
+    final locale = ref.watch(languageProvider);
     final themeColor = ThemeColor();
 
     return ScreenUtilInit(
@@ -40,8 +42,22 @@ class MainApp extends ConsumerWidget {
           theme: themeColor.lightTheme,
           darkTheme: themeColor.darkTheme,
           themeMode: themeMode,
+          locale: locale,
           routerConfig: appRouter,
           supportedLocales: AppLocalizations.supportedLocales,
+          localeResolutionCallback: (deviceLocale, supportedLocales) {
+            if (locale != null) return locale;
+
+            if (deviceLocale != null) {
+              for (final supported in supportedLocales) {
+                if (supported.languageCode == deviceLocale.languageCode) {
+                  return supported;
+                }
+              }
+            }
+
+            return const Locale('fr');
+          },
           localizationsDelegates: const [
             AppLocalizationsDelegate(),
             GlobalMaterialLocalizations.delegate,

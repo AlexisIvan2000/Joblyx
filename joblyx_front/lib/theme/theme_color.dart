@@ -19,7 +19,7 @@ class ThemeColor {
     useMaterial3: true,
     colorScheme: ColorScheme.fromSeed(
       seedColor: Colors.teal[300]!,
-      surface: const Color.fromARGB(255, 49, 49, 49),
+      surface: const Color.fromARGB(255, 65, 64, 64),
       primary: Colors.teal[700]!,
       tertiary: Color(0xFF03DAC6),
       secondary: Color(0xFF018786),

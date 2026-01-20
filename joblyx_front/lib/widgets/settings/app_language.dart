@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:joblyx_front/providers/provider_language.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
 
 void showLanguageSheet(BuildContext context) {
@@ -9,28 +11,31 @@ void showLanguageSheet(BuildContext context) {
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
     ),
-    builder: (_) => const AppLanguage(),
+    builder: (ctx) => const AppLanguage(),
   );
 }
 
-class AppLanguage extends StatefulWidget {
+class AppLanguage extends ConsumerWidget {
   const AppLanguage({super.key});
 
-  @override
-  State<AppLanguage> createState() => _AppLanguageState();
-}
-
-class _AppLanguageState extends State<AppLanguage> {
-  String _selectedLanguage = 'sys';
-
-  void _onLanguageChanged(String value) {
-    setState(() => _selectedLanguage = value);
+  String _localeToCode(Locale? locale) {
+    if (locale == null) return 'sys';
+    return locale.languageCode;
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final t = AppLocalizations.of(context);
+    final currentLocale = ref.watch(languageProvider);
+    final currentCode = _localeToCode(currentLocale);
+
+    void onLanguageChanged(String? code) {
+      if (code != null) {
+        ref.read(languageProvider.notifier).setLanguage(code);
+        Navigator.pop(context);
+      }
+    }
 
     return Padding(
       padding: EdgeInsets.only(
@@ -51,51 +56,27 @@ class _AppLanguageState extends State<AppLanguage> {
           ),
           SizedBox(height: 12.h),
           RadioGroup<String>(
-            groupValue: _selectedLanguage,
-            onChanged: (value) => _onLanguageChanged(value!),
+            groupValue: currentCode,
+            onChanged: onLanguageChanged,
             child: Column(
               children: [
-                _LanguageOption(
-                  title: t.t('settings.system'), 
-                  value: 'sys', 
-                  onTap: _onLanguageChanged,
+                RadioListTile<String>(
+                  title: Text(t.t('settings.system')),
+                  value: 'sys',
                 ),
-                _LanguageOption(
-                  title: t.t('settings.french'),
+                RadioListTile<String>(
+                  title: Text(t.t('settings.french')),
                   value: 'fr',
-                  onTap: _onLanguageChanged,
                 ),
-                _LanguageOption(
-                  title: t.t('settings.english'),
+                RadioListTile<String>(
+                  title: Text(t.t('settings.english')),
                   value: 'en',
-                  onTap: _onLanguageChanged,
                 ),
               ],
             ),
           ),
         ],
       ),
-    );
-  }
-}
-
-class _LanguageOption extends StatelessWidget {
-  final String title;
-  final String value;
-  final ValueChanged<String> onTap;
-
-  const _LanguageOption({
-    required this.title,
-    required this.value,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(title),
-      trailing: Radio<String>(value: value),
-      onTap: () => onTap(value),
     );
   }
 }
