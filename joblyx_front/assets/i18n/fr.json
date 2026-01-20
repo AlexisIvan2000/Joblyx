@@ -120,7 +120,13 @@
         "english": "Anglais",
         "contact_email": "support@joblyx.com",
         "contact_message": "Une question, un bug ou une idée pour améliorer Joblyx? Vos suggestions nous aident à construire le meilleur outil pour votre carrière. Écrivez-nous !",
-        "contact_response_time": "Attendez-vous à une réponse sous 24-48h."
+        "contact_response_time": "Attendez-vous à une réponse sous 24-48h.",
+        "email_error": "Impossible d'ouvrir l'application email.",
+        "description": "Description",
+        "about_description": "Joblyx utilise l'IA pour vous aider à analyser le marché de l'emploi, optimiser votre profil et préparer vos entretiens. Notre mission est de donner aux chercheurs d'emploi des outils de pointe pour faire avancer leur carrière.",
+        "social_networks": "Réseaux sociaux",
+        "copyright": "© 2026 Joblyx. Tous droits réservés."
+
 
     },
     "err": {

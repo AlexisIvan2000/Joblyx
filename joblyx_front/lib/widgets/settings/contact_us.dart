@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
+import 'package:joblyx_front/widgets/app_snackbar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void showContactUsSheet(BuildContext context) {
   showModalBottomSheet(
@@ -15,6 +17,29 @@ void showContactUsSheet(BuildContext context) {
 
 class ContactUsWidget extends StatelessWidget {
   const ContactUsWidget({super.key});
+
+  Future<void> _sendEmail(BuildContext context) async {
+    final t = AppLocalizations.of(context);
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: 'support@joblyx.com',
+      queryParameters: {'subject': 'Support/Suggestions'},
+    );
+
+    try {
+      if (await canLaunchUrl(emailUri)) {
+        await launchUrl(emailUri);
+      } else {
+        if (context.mounted) {
+          AppSnackBar.showError(context, t.t('settings.email_error'));
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        AppSnackBar.showError(context, t.t('settings.email_error'));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,15 +73,20 @@ class ContactUsWidget extends StatelessWidget {
           Center(
             child: Column(
               children: [
-                GestureDetector(
-                  onTap: () {
-                    // Implement email launch functionality here
-                  },
-                  child: Text(
-                    t.t('settings.contact_email'),
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: cs.secondary,
-                      fontWeight: FontWeight.w600,
+                InkWell(
+                  onTap: () => _sendEmail(context),
+                  borderRadius: BorderRadius.circular(8.r),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 8.w,
+                      vertical: 4.h,
+                    ),
+                    child: Text(
+                      t.t('settings.contact_email'),
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: cs.secondary,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
