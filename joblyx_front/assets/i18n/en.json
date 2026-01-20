@@ -102,6 +102,7 @@
     "app_preferences": "App preferences",
     "color_mode": "Color mode",
     "change_language": "Change language",
+    "change_password": "Change password",
     "documentation":  "Documents",
     "about": "About",
     "privacy_policy": "Privacy policy",
@@ -116,7 +117,10 @@
     "light": "Light",
     "dark": "Dark",
     "french": "French",
-    "english": "English"
+    "english": "English",
+    "contact_email": "support@joblyx.com",
+    "contact_message": "Have a question, found a bug, or have an idea to improve Joblyx? Your suggestions help us build the best tool for your carreer. Get in touch!",
+    "contact_response_time": "Expect a response within 24-48h."
 
   },
 

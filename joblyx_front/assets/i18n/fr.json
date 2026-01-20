@@ -117,7 +117,10 @@
         "light": "Clair",
         "dark": "Sombre",
         "french": "Français",
-        "english": "Anglais"
+        "english": "Anglais",
+        "contact_email": "support@joblyx.com",
+        "contact_message": "Une question, un bug ou une idée pour améliorer Joblyx? Vos suggestions nous aident à construire le meilleur outil pour votre carrière. Écrivez-nous !",
+        "contact_response_time": "Attendez-vous à une réponse sous 24-48h."
 
     },
     "err": {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
+import 'package:joblyx_front/widgets/settings/contact_us.dart';
 
 class Support extends StatelessWidget {
   const Support({super.key});
@@ -19,7 +20,7 @@ class Support extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             trailing: Icon(Icons.chevron_right),
-            onTap: () {},
+            onTap: ()=> showContactUsSheet(context),
           ),
           Divider(height: 1.h, color:  Colors.grey[400]),
           ListTile(
