@@ -6,10 +6,12 @@ import 'package:joblyx_front/services/app_localizations.dart';
 import 'package:joblyx_front/routers/app_router.dart';
 import 'package:joblyx_front/providers/provider_theme_color.dart';
 import 'package:joblyx_front/providers/provider_language.dart';
+import 'package:joblyx_front/providers/shared_preferences_provider.dart';
 import 'package:joblyx_front/theme/theme_color.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +21,15 @@ void main() async {
     url: dotenv.env['SUPABASE_URL']!,
     anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
   );
-  runApp(const ProviderScope(child: MainApp()));
+  final sharedPreferences = await SharedPreferences.getInstance();
+  runApp(
+    ProviderScope(
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+      ],
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends ConsumerWidget {

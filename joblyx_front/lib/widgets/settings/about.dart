@@ -34,76 +34,31 @@ class AboutWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Center(
-            child: Text(
-              'Joblyx',
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: cs.secondary,
-                fontSize: 20.sp,
-              ),
-            ),
-          ),
-          SizedBox(height: 5.h),
-          Center(
-            child: Text('Version 1.0.0', style: theme.textTheme.bodyMedium),
-          ),
-          Divider(color: cs.onSurfaceVariant, thickness: 1.0),
-          Text(
-            t.t('settings.description'),
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          SizedBox(height: 8.h),
-          Text(
-            t.t('settings.about_description'),
-            style: theme.textTheme.bodyMedium,
-          ),
-          Divider(color: cs.onSurfaceVariant, thickness: 1.0),
-          Text(
-            t.t('settings.social_networks'),
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          SizedBox(height: 8.h),
-          Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  // Open Twitter link
-                },
-                child: Text(
-                  'LinkedIn',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                   
-                    fontWeight: FontWeight.w600,
+            child: Column(
+              children: [
+                Text(
+                  'Joblyx',
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: cs.secondary,
                   ),
                 ),
-              ),
-              SizedBox(width: 20.w),
-              GestureDetector(
-                onTap: () {
-                  // Open Twitter link
-                },
-                child: Text(
-                  'GitHub',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    
-                    fontWeight: FontWeight.w600,
-                  ),
+                SizedBox(height: 5.h),
+                Text(
+                  t.t('settings.version'),
+                  style: theme.textTheme.titleMedium,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          Divider(color: cs.onSurfaceVariant, thickness: 1.0),
+          SizedBox(height: 10.h),
           Center(
             child: Text(
               t.t('settings.copyright'),
-              style: theme.textTheme.bodySmall,
+              style: theme.textTheme.titleSmall,
             ),
           ),
-          SizedBox(height: 15.h),
+          SizedBox(height: 10.h),
         ],
       ),
     );

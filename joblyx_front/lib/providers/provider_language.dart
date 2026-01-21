@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:joblyx_front/providers/shared_preferences_provider.dart';
 
 const _languageKey = 'language';
 
@@ -10,18 +10,13 @@ final languageProvider =
 class LanguageNotifier extends Notifier<Locale?> {
   @override
   Locale? build() {
-    _loadLanguage();
-    return null; 
-  }
-
-  Future<void> _loadLanguage() async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs = ref.watch(sharedPreferencesProvider);
     final code = prefs.getString(_languageKey);
-    state = _localeFromString(code);
+    return _localeFromString(code);
   }
 
   Future<void> setLanguage(String? languageCode) async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs = ref.read(sharedPreferencesProvider);
     if (languageCode == null || languageCode == 'sys') {
       state = null;
       await prefs.remove(_languageKey);

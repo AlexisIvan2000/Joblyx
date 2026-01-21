@@ -16,7 +16,7 @@ class Documents extends StatelessWidget {
         children: [
           ListTile(
             title: Text(
-              t.t('settings.about'),
+              t.t('settings.license'),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             trailing: Icon(Icons.chevron_right),

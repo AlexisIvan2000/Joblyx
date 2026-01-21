@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:joblyx_front/providers/shared_preferences_provider.dart';
 
 const _themeModeKey = 'theme_mode';
 
@@ -10,19 +10,14 @@ final themeModeProvider =
 class ThemeModeNotifier extends Notifier<ThemeMode> {
   @override
   ThemeMode build() {
-    _loadThemeMode();
-    return ThemeMode.system;
-  }
-
-  Future<void> _loadThemeMode() async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs = ref.watch(sharedPreferencesProvider);
     final modeString = prefs.getString(_themeModeKey);
-    state = _themeModeFromString(modeString);
+    return _themeModeFromString(modeString);
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {
     state = mode;
-    final prefs = await SharedPreferences.getInstance();
+    final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(_themeModeKey, _themeModeToString(mode));
   }
 

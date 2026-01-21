@@ -104,7 +104,7 @@
     "change_language": "Change language",
     "change_password": "Change password",
     "documentation":  "Documents",
-    "about": "About",
+    "license": "License open source",
     "privacy_policy": "Privacy policy",
     "support": "Support",
     "contact_us": "Contact us",
@@ -122,9 +122,7 @@
     "contact_message": "Have a question, found a bug, or have an idea to improve Joblyx? Your suggestions help us build the best tool for your carreer. Get in touch!",
     "contact_response_time": "Expect a response within 24-48h.",
     "email_error": "Unable to open email application.",
-    "description": "Description",
-    "about_description": "Joblyx leverages AI to help you analyze the job market, optimize your profile, and prepare for interviews. Our mission is to empower job seekers with cutting-edge tools to advance their careers.",
-    "social_networks": "Social Networks",
+    "version": "v1.0.0",
     "copyright": "© 2026 Joblyx. All rights reserved."
    
 

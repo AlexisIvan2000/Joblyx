@@ -104,7 +104,7 @@
         "change_language": "Changer la langue",
         "change_password": "Changer le mot de passe",
         "documentation":  "Documentation",
-        "about": "À propos",
+        "license": "Licence open source",
         "privacy_policy": "Politique de confidentialité",
         "support": "Support",
         "contact_us": "Nous contacter",
@@ -122,9 +122,7 @@
         "contact_message": "Une question, un bug ou une idée pour améliorer Joblyx? Vos suggestions nous aident à construire le meilleur outil pour votre carrière. Écrivez-nous !",
         "contact_response_time": "Attendez-vous à une réponse sous 24-48h.",
         "email_error": "Impossible d'ouvrir l'application email.",
-        "description": "Description",
-        "about_description": "Joblyx utilise l'IA pour vous aider à analyser le marché de l'emploi, optimiser votre profil et préparer vos entretiens. Notre mission est de donner aux chercheurs d'emploi des outils de pointe pour faire avancer leur carrière.",
-        "social_networks": "Réseaux sociaux",
+        "version": "v1.0.0",
         "copyright": "© 2026 Joblyx. Tous droits réservés."
 
 
