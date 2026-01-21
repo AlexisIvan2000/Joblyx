@@ -110,7 +110,6 @@ class _AvatarWithCamera extends StatelessWidget {
   }
 }
 
-/// Informations utilisateur extraites
 class _UserInfo extends StatelessWidget {
   final String meText;
   final String memberSinceText;

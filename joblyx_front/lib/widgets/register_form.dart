@@ -205,7 +205,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
                   ),
                 ),
                 Expanded(
-                  child: Divider(color: Colors.grey[400], thickness: 1.0),
+                  child: Divider(color: cs.outlineVariant, thickness: 1.0),
                 ),
               ],
             ),

@@ -168,7 +168,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             Row(
               children: [
                 Expanded(
-                  child: Divider(color: cs.onSurface, thickness: 1.0),
+                  child: Divider(color: cs.outlineVariant, thickness: 1.0),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0.w),
@@ -178,7 +178,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                   ),
                 ),
                 Expanded(
-                  child: Divider(color: Colors.grey[400], thickness: 1.0),
+                  child: Divider(color: cs.outlineVariant, thickness: 1.0),
                 ),
               ],
             ),
