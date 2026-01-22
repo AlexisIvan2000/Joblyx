@@ -31,12 +31,14 @@ class _LinkedInButtonState extends ConsumerState<LinkedInButton> {
   }
 
   Future<void> _handleLinkedInLogin() async {
+    if (_isLoading) return;
+
     setState(() {
       _isLoading = true;
     });
 
     try {
-      // Écoute les changements d'auth pour rediriger après OAuth
+      
       _authSubscription?.cancel();
       _authSubscription = ref
           .read(supabaseProvider)
@@ -53,6 +55,9 @@ class _LinkedInButtonState extends ConsumerState<LinkedInButton> {
     } on AuthFailure catch (e) {
       _authSubscription?.cancel();
       if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
         AppSnackBar.showError(
           context,
           AppLocalizations.of(context).t('err.${e.code}'),
@@ -61,14 +66,11 @@ class _LinkedInButtonState extends ConsumerState<LinkedInButton> {
     } catch (e) {
       _authSubscription?.cancel();
       if (mounted) {
-        final t = AppLocalizations.of(context);
-        AppSnackBar.showError(context, t.t('err.unknown_error'));
-      }
-    } finally {
-      if (mounted) {
         setState(() {
           _isLoading = false;
         });
+        final t = AppLocalizations.of(context);
+        AppSnackBar.showError(context, t.t('err.unknown_error'));
       }
     }
   }

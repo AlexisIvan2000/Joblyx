@@ -247,6 +247,20 @@ class AuthService {
         return 'email_exists';
       case 'email_conflict_identity_not_deletable':
         return 'email_conflict';
+      case 'bad_oauth_callback':
+        return 'bad_oauth_callback';
+      case 'bad_oauth_state':
+        return 'bad_oauth_state';
+      case 'conflict':
+        return 'conflict';
+      case 'flow_state_expired':
+        return 'flow_state_expired';
+      case 'flow_state_not_found':
+        return 'flow_state_not_found';
+      case 'identity_already_exists':
+        return 'identity_already_exists';
+      case 'oauth_provider_not_supported':
+        return 'oauth_provider_not_supported';
       default:
         return 'unknown_error';
     }

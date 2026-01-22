@@ -153,7 +153,14 @@
     "resend_failed": "Failed to resend the code. Please try again or contact support.",
     "logout_failed": "Failed to logout. Please try again.",
     "invalid_field": "Invalid field.",
-    "update_failed": "Failed to update. Please try again."
+    "update_failed": "Failed to update. Please try again.",
+    "bad_oauth_callback": "Problem with the OAuth provider.",
+    "bad_oauth_state": "Data received from OAuth provider is invalid",
+    "conflict": "Too many session refresh requests firing off at the same time for  user.",
+    "flow_state_expired": "The flow state has expired. Login again.",
+    "flow_state_not_found": "The flow state was not found. Login again.",
+    "identity_already_exists": "An account already exists with the same identity provider.",
+    "oauth_provider_not_supported": "The LinkedIn OAuth was disabled"
   },
 
   "code_verification": {

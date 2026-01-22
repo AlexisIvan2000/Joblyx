@@ -152,7 +152,16 @@
     "resend_failed": "Échec du renvoi du code. Veuillez réessayer ou contacter le support.",
     "logout_failed": "Échec de la déconnexion. Veuillez réessayer.",
     "invalid_field": "Champ invalide.",
-    "update_failed": "Échec de la mise à jour. Veuillez réessayer."
+    "update_failed": "Échec de la mise à jour. Veuillez réessayer.",
+    "bad_oauth_callback": "Problème avec le fournisseur OAuth.",
+    "bad_oauth_state": "Les données reçues du fournisseur OAuth sont invalides.",
+    "conflict": "Trop de demandes de rafraîchissement de session simultanées pour l'utilisateur.",
+    "flow_state_expired": "L'état du flux a expiré. Veuillez vous reconnecter.",
+    "flow_state_not_found": "L'état du flux est introuvable. Veuillez vous reconnecter.",
+    "identity_already_exists": "Un compte existe déjà avec le même fournisseur d'identité.",
+    "oauth_provider_not_supported": "L'OAuth LinkedIn a été désactivé"
+    
+
   },
 
     "code_verification": {
