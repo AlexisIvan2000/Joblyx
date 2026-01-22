@@ -1,19 +1,28 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:joblyx_front/models/user_model.dart';
+import 'package:joblyx_front/providers/auth_state_provider.dart';
 import 'package:joblyx_front/providers/supabase_provider.dart';
 
 final userProvider = StreamProvider<UserModel?>((ref) {
   final supabase = ref.watch(supabaseProvider);
-  final user = supabase.auth.currentUser;
 
-  if (user == null) return Stream.value(null);
+  // Écoute les changements d'auth pour se rafraîchir quand l'utilisateur change
+  final authState = ref.watch(authStateProvider);
 
-  return supabase
-      .from('profiles')
-      .stream(primaryKey: ['id'])
-      .eq('id', user.id)
-      .map((data) =>
-       data.isEmpty ? null : UserModel.fromMap(data.first));
+  return authState.when(
+    data: (state) {
+      final user = state.session?.user;
+      if (user == null) return Stream.value(null);
+
+      return supabase
+          .from('profiles')
+          .stream(primaryKey: ['id'])
+          .eq('id', user.id)
+          .map((data) => data.isEmpty ? null : UserModel.fromMap(data.first));
+    },
+    loading: () => Stream.value(null),
+    error: (_, __) => Stream.value(null),
+  );
 });
 
 // Selective providers to avoid unnecessary rebuilds

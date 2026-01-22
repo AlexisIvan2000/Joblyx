@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:joblyx_front/services/auth_exception.dart';
 import 'package:joblyx_front/widgets/confirm_email.dart';
+import 'package:joblyx_front/widgets/linkedin_button.dart';
 import 'app_snackbar.dart';
 
 
@@ -210,27 +211,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
               ],
             ),
             SizedBox(height: 13.h),
-            SizedBox(
-              width: double.infinity,
-              height: 52.h,
-              child: OutlinedButton.icon(
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: cs.outlineVariant),
-                  backgroundColor: cs.surface,
-                  foregroundColor: cs.surface,
-                ),
-                onPressed: () {},
-                label: Text(
-                  t.t('login.continue_with_linkedin'),
-                  style: TextStyle(fontSize: 16, color: Colors.black87),
-                ),
-                icon: Image.asset(
-                  'assets/images/linkeldin_logo.png',
-                  height: 24.h,
-                  width: 24.w,
-                ),
-              ),
-            ),
+            LinkedInButton(),
             SizedBox(height: 13.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

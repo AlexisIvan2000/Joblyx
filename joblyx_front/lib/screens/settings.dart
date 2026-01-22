@@ -37,32 +37,32 @@ class SettingsScreen extends ConsumerWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(height: 2),
+            const SizedBox(height: 1),
             const AppPreferences(),
-            const SizedBox(height: 2),
+            const SizedBox(height: 1),
             Text(
               t.t('settings.documentation'),
               style: theme.textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(height: 2),
+            const SizedBox(height: 1),
             const Documents(),
-            const SizedBox(height: 2),
+            const SizedBox(height: 1),
             Text(
               t.t('settings.support'),
               style: theme.textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const SizedBox(height: 2),
+            const SizedBox(height: 1),
             const Support(),
             Center(
               child: Column(
                 children: [
                   Text(
                     'Joblyx',
-                    style: theme.textTheme.titleLarge?.copyWith(
+                    style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: cs.secondary,
                     ),
@@ -70,12 +70,12 @@ class SettingsScreen extends ConsumerWidget {
                   SizedBox(height: 2.h),
                   Text(
                     t.t('settings.version'),
-                    style: theme.textTheme.titleMedium,
+                    style: theme.textTheme.titleSmall,
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             SizedBox(
               width: double.infinity,
               height: 52.h,

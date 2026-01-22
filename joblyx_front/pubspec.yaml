@@ -42,7 +42,7 @@ flutter:
     - assets/images/logo.png
     - assets/images/logo_1.png
     - assets/images/logo_j.png
-    - assets/images/linkeldin_logo.png
+    - assets/images/linkedin_logo.svg
     - assets/images/profile.png
     - assets/i18n/en.json
     - assets/i18n/fr.json

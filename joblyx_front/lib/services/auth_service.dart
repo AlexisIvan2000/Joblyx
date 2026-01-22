@@ -201,6 +201,24 @@ class AuthService {
     }
   }
 
+  // LinkedIn authentication
+  Future<void> signInWithLinkedIn() async {
+    try {
+      await _supabase.auth.signInWithOAuth(
+        OAuthProvider.linkedinOidc,
+        redirectTo: 'joblyx://auth/callback',
+      );
+    } on AuthException catch (e) {
+      throw AuthFailure(_mapAuthException(e.code));
+    } catch (e) {
+      throw AuthFailure('unknown_error');
+    }
+  }
+  
+  
+  
+  
+  
   String _mapAuthException(String? code) {
     switch (code) {
       case 'weak_password':

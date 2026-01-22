@@ -8,6 +8,7 @@ import 'package:joblyx_front/services/app_localizations.dart';
 import 'package:joblyx_front/services/auth_exception.dart';
 import 'package:joblyx_front/widgets/app_snackbar.dart';
 import 'package:joblyx_front/widgets/forgot_password.dart';
+import 'package:joblyx_front/widgets/linkedin_button.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({super.key});
@@ -183,29 +184,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               ],
             ),
             SizedBox(height: 13.h),
-            SizedBox(
-              width: double.infinity,
-              height: 52.h,
-              child: OutlinedButton.icon(
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: cs.outlineVariant),
-                  backgroundColor: cs.surface,
-                  foregroundColor: cs.surface,
-                ),
-                onPressed: () {
-                  // context.go('/home');
-                },
-                label: Text(
-                  t.t('login.continue_with_linkedin'),
-                  style: TextStyle(fontSize: 16, color: cs.onSurface),
-                ),
-                icon: Image.asset(
-                  'assets/images/linkeldin_logo.png',
-                  height: 24.h,
-                  width: 24.w,
-                ),
-              ),
-            ),
+            LinkedInButton(),
             SizedBox(height: 13.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
