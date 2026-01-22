@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:joblyx_front/providers/user_provider.dart';
+import 'package:joblyx_front/providers/location_provider.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
 import 'package:joblyx_front/widgets/profile_avatar.dart';
 
@@ -16,6 +17,7 @@ class HomeScreen extends ConsumerWidget {
     final cs = theme.colorScheme;
     final textTheme = theme.textTheme;
     final userDataAsync = ref.watch(userHomeDataProvider);
+    final location = ref.watch(locationProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -36,6 +38,7 @@ class HomeScreen extends ConsumerWidget {
               firstName: userData.firstName!,
               profilePicture: userData.profilePicture,
               welcomeText: t.t('home.welcome'),
+              location: location,
               textTheme: textTheme,
               colorScheme: cs,
             );
@@ -51,6 +54,7 @@ class _WelcomeHeader extends StatelessWidget {
   final String firstName;
   final String? profilePicture;
   final String welcomeText;
+  final String? location;
   final TextTheme textTheme;
   final ColorScheme colorScheme;
 
@@ -58,6 +62,7 @@ class _WelcomeHeader extends StatelessWidget {
     required this.firstName,
     required this.profilePicture,
     required this.welcomeText,
+    required this.location,
     required this.textTheme,
     required this.colorScheme,
   });
@@ -82,13 +87,15 @@ class _WelcomeHeader extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 3.h),
-            Text(
-              'Montreal, QC',
-              style: textTheme.bodyMedium?.copyWith(
-                color: colorScheme.onSurfaceVariant,
+            if (location != null) ...[
+              SizedBox(height: 3.h),
+              Text(
+                location!,
+                style: textTheme.bodyMedium?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
               ),
-            ),
+            ],
           ],
         ),
       ],

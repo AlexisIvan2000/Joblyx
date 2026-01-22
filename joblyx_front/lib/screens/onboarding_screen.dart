@@ -50,7 +50,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     final pages = [
       _OnboardingPageData(
-        title: 'Joblyx',
+        title: null,
         description: t.t('intro.first_introduction'),
         image: 'assets/images/rocket.png',
       ),
