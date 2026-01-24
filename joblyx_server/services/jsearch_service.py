@@ -29,7 +29,7 @@ class JSearchService:
             params = {
                 "query": f"{query} in {location}" if location else query,
                 "page": str(page),
-                "num_pages": "1",
+                "num_pages": "3",
                 "country": "ca",
                 "date_posted": "month"
             }

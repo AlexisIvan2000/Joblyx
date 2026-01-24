@@ -925,7 +925,7 @@
             {"name": "Power Apps", "variants": ["powerapps", "microsoft power apps"]},
             {"name": "Power Automate", "variants": ["microsoft flow"]},
             {"name": "Zapier", "variants": []},
-            {"name": "Make", "variants": ["integromat"]},
+            {"name": "Makefile", "variants": ["gnu make", "make build"]},
             {"name": "n8n", "variants": []},
             {"name": "Airtable", "variants": []},
             {"name": "Notion", "variants": []},

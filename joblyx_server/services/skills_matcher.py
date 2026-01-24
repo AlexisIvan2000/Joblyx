@@ -1,5 +1,5 @@
 import json
-import os
+import re
 from pathlib import Path
 
 import spacy
@@ -9,6 +9,30 @@ from langdetect import detect, LangDetectException
 
 class SkillsMatcher:
     _instance = None
+
+    AMBIGUOUS_SKILLS = {"C", "R", "D", "Go", "Rust", "Ruby", "Swift", "Dart", "Lua", "Slim", "Nest", "Echo", "Fiber", "Chi", "Rocket", "Ktor", "Remix", "Lit", "Bull", "Consul", "Make", "Flux", "Ray", "Salt", "Base", "Near", "Ada"}
+
+    SKILL_CONTEXT_PATTERNS = {
+        "C": [r"\bC\s+programming\b", r"\bC\s+language\b", r"\bC/C\+\+\b", r"\bC\s+developer\b", r"\bin\s+C\b", r"\bprogramming\s+in\s+C\b"],
+        "R": [r"\bR\s+programming\b", r"\bR\s+language\b", r"\bR\s+studio\b", r"\bR\s+developer\b", r"\bstatistical.*\bR\b"],
+        "D": [r"\bD\s+programming\b", r"\bD\s+language\b", r"\bDlang\b"],
+        "Go": [r"\bGo\s+programming\b", r"\bGolang\b", r"\bGo\s+language\b", r"\bGo\s+developer\b"],
+        "Rust": [r"\bRust\s+programming\b", r"\bRust\s+language\b", r"\bRust\s+developer\b", r"\bRustlang\b"],
+        "Ruby": [r"\bRuby\s+on\s+Rails\b", r"\bRuby\s+programming\b", r"\bRuby\s+developer\b"],
+        "Swift": [r"\bSwift\s+programming\b", r"\bSwiftUI\b", r"\bSwift\s+developer\b", r"\biOS.*Swift\b"],
+        "Base": [r"\bBase\s+chain\b", r"\bBase\s+blockchain\b", r"\bBase\s+network\b"],
+        "Make": [r"\bMakefile\b", r"\bGNU\s+Make\b", r"\bIntegr?omat\b"],
+        "Salt": [r"\bSaltStack\b", r"\bSalt\s+Stack\b"],
+        "Chef": [r"\bChef\s+(?:automation|infra|devops)\b", r"\bOpscode\s+Chef\b"],
+        "Flux": [r"\bFlux\s*CD\b", r"\bGitOps.*Flux\b"],
+        "Ray": [r"\bRay\.io\b", r"\bRay\s+distributed\b", r"\bRay\s+cluster\b"],
+        "Near": [r"\bNEAR\s+Protocol\b", r"\bNEAR\s+blockchain\b"],
+        "Ada": [r"\bAda\s+programming\b", r"\bAda\s+language\b"],
+        "Slim": [r"\bSlim\s+PHP\b", r"\bSlim\s+framework\b"],
+        "Echo": [r"\bEcho\s+framework\b", r"\bEcho\s+Go\b"],
+        "Fiber": [r"\bFiber\s+Go\b", r"\bGoFiber\b"],
+        "Bull": [r"\bBullMQ\b", r"\bBull\s+queue\b"],
+    }
 
     def __new__(cls):
         if cls._instance is None:
@@ -53,7 +77,8 @@ class SkillsMatcher:
                     "category": category
                 }
 
-                self.all_patterns.append(name.lower())
+                if name not in self.AMBIGUOUS_SKILLS:
+                    self.all_patterns.append(name.lower())
 
                 for variant in variants:
                     if variant:
@@ -96,6 +121,27 @@ class SkillsMatcher:
         except LangDetectException:
             return "en"
 
+    def _check_ambiguous_skills(self, text: str) -> set[str]:
+        """
+        Check for ambiguous skills using context patterns.
+
+        Args:
+            text: Text to analyze
+
+        Returns:
+            Set of validated ambiguous skill names
+        """
+        found = set()
+        text_upper = text
+
+        for skill, patterns in self.SKILL_CONTEXT_PATTERNS.items():
+            for pattern in patterns:
+                if re.search(pattern, text_upper, re.IGNORECASE):
+                    found.add(skill)
+                    break
+
+        return found
+
     def extract_skills(self, text: str) -> list[str]:
         """
         Extract skills from text using SpaCy PhraseMatcher.
@@ -130,6 +176,9 @@ class SkillsMatcher:
             if matched_text in self.skill_to_category:
                 skill_info = self.skill_to_category[matched_text]
                 found_skills.add(skill_info["name"])
+
+        ambiguous_found = self._check_ambiguous_skills(text)
+        found_skills.update(ambiguous_found)
 
         return list(found_skills)
 
@@ -167,6 +216,13 @@ class SkillsMatcher:
                 skill_info = self.skill_to_category[matched_text]
                 if skill_info["name"] not in found_skills:
                     found_skills[skill_info["name"]] = skill_info["category"]
+
+        ambiguous_found = self._check_ambiguous_skills(text)
+        for skill_name in ambiguous_found:
+            if skill_name not in found_skills:
+                skill_info = self.skill_to_category.get(skill_name.lower())
+                if skill_info:
+                    found_skills[skill_name] = skill_info["category"]
 
         return [
             {"name": name, "category": category}

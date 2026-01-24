@@ -33,19 +33,22 @@ async def analyze_market(
     job: str = Query(..., description="Job title (e.g., 'Software Developer')"),
     city: str = Query(..., description="City name (e.g., 'Toronto')"),
     province: str = Query(..., description="Province name (e.g., 'Ontario')"),
-    top_n: int = Query(25, ge=10, le=50, description="Number of top skills to return (10-50)")
+    top_n: int = Query(25, ge=10, le=50, description="Number of top skills to return (10-50)"),
+    balanced: bool = Query(True, description="Balance skills across categories")
 ):
     """
     Analyze the job market for a specific position and location in Canada.
 
     Returns the most in-demand skills based on job postings.
+    When balanced=True, ensures diversity across skill categories.
     """
     try:
         result = market_analyzer.analyze_market(
             query=job,
             city=city,
             province=province,
-            top_n=top_n
+            top_n=top_n,
+            balanced=balanced
         )
         return result
     except Exception as e:
