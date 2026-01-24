@@ -57,25 +57,7 @@ class SettingsScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 1),
             const Support(),
-            Center(
-              child: Column(
-                children: [
-                  Text(
-                    'Joblyx',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: cs.secondary,
-                    ),
-                  ),
-                  SizedBox(height: 2.h),
-                  Text(
-                    t.t('settings.version'),
-                    style: theme.textTheme.titleSmall,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 30),
             SizedBox(
               width: double.infinity,
               height: 52.h,

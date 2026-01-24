@@ -66,7 +66,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     });
 
     return Scaffold(
-      backgroundColor: cs.primary,
+      backgroundColor: cs.secondary,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -80,7 +80,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                 letterSpacing: 2,
               ),
             ),
-            SizedBox(height: 90.h),
+            SizedBox(height: 70.h),
             const CircularProgressIndicator(
               color: Colors.white,
               strokeWidth: 3,
