@@ -8,6 +8,7 @@ import 'package:joblyx_front/screens/menu/cv.dart';
 import 'package:joblyx_front/screens/menu/home.dart';
 import 'package:joblyx_front/screens/menu/profil.dart';
 import 'package:joblyx_front/screens/onboarding_screen.dart';
+import 'package:joblyx_front/screens/splash_screen.dart';
 import 'package:joblyx_front/screens/register.dart';
 import 'package:joblyx_front/screens/settings.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -38,19 +39,43 @@ CustomTransitionPage<T> slideTransition<T>({
   );
 }
 
+// Routes publiques (pas besoin d'être connecté)
+const _publicRoutes = [
+  AppRoutes.splash,
+  AppRoutes.onboarding,
+  AppRoutes.login,
+  AppRoutes.register,
+];
+
 final appRouter = GoRouter(
-  initialLocation: AppRoutes.onboarding,
+  initialLocation: AppRoutes.splash,
   redirect: (context, state) {
-    final location = state.uri.toString();
+    final session = Supabase.instance.client.auth.currentSession;
+    final isLoggedIn = session != null;
+    final location = state.uri.path;
 
     // Capture les deep links OAuth (joblyx://auth/callback ou /auth/callback)
-    if (location.contains('auth/callback') || location.contains('code=')) {
-      final session = Supabase.instance.client.auth.currentSession;
-      if (session != null) {
-        return AppRoutes.home;
-      }
+    if (location.contains('auth/callback') || state.uri.toString().contains('code=')) {
+      return isLoggedIn ? AppRoutes.home : AppRoutes.login;
+    }
+
+    // Splash gère sa propre navigation
+    if (location == AppRoutes.splash) {
+      return null;
+    }
+
+    final isPublicRoute = _publicRoutes.contains(location);
+
+    // Si pas connecté et route protégée → login
+    if (!isLoggedIn && !isPublicRoute) {
       return AppRoutes.login;
     }
+
+    // Si connecté et sur login/register → home
+    if (isLoggedIn && (location == AppRoutes.login || location == AppRoutes.register)) {
+      return AppRoutes.home;
+    }
+
     return null;
   },
   errorBuilder: (context, state) {
@@ -70,6 +95,14 @@ final appRouter = GoRouter(
     );
   },
   routes: [
+    GoRoute(
+      path: AppRoutes.splash,
+      pageBuilder: (context, state) => slideTransition(
+        context: context,
+        state: state,
+        child: const SplashScreen(),
+      ),
+    ),
     GoRoute(
       path: AppRoutes.onboarding,
       pageBuilder: (context, state) => slideTransition(
