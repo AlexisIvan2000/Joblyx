@@ -49,48 +49,44 @@ class _DeleteAccountSheetState extends ConsumerState<DeleteAccountSheet> {
 
     return Padding(
       padding: EdgeInsets.only(
-        left: 24.w,
-        right: 24.w,
-        top: 24.w,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 24.w,
+        left: 16.w,
+        right: 16.w,
+        top: 16.h,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 16.h,
       ),
       child: Form(
         key: _formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 40.w,
-              height: 4.h,
-              decoration: BoxDecoration(
-                color: cs.onSurface.withValues(alpha: 0.3),
-                borderRadius: BorderRadius.circular(2.r),
-              ),
-            ),
-            SizedBox(height: 20.h),
-            Icon(
-              Icons.warning_amber_rounded,
-              size: 48.sp,
-              color: cs.error,
-            ),
-            SizedBox(height: 16.h),
             Text(
               t.t('profil.delete_account_title'),
               style: textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: cs.error,
               ),
-              textAlign: TextAlign.center,
             ),
             SizedBox(height: 12.h),
-            Text(
-              t.t('profil.delete_account_message'),
-              style: textTheme.bodyMedium?.copyWith(
-                color: cs.onSurface.withValues(alpha: 0.7),
-              ),
-              textAlign: TextAlign.center,
+            Row(
+              children: [
+                Icon(
+                  Icons.warning_amber_rounded,
+                  size: 24.sp,
+                  color: cs.error,
+                ),
+                SizedBox(width: 12.w),
+                Expanded(
+                  child: Text(
+                    t.t('profil.delete_account_message'),
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: cs.onSurface.withValues(alpha: 0.7),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: 24.h),
+            SizedBox(height: 16.h),
             TextFormField(
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
@@ -111,33 +107,44 @@ class _DeleteAccountSheetState extends ConsumerState<DeleteAccountSheet> {
                 return null;
               },
             ),
-            SizedBox(height: 24.h),
+            SizedBox(height: 20.h),
             Row(
               children: [
                 Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text(t.t('settings.cancel')),
+                  child: SizedBox(
+                    height: 42.h,
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text(
+                        t.t('settings.cancel'),
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ),
                   ),
                 ),
                 SizedBox(width: 12.w),
                 Expanded(
-                  child: FilledButton(
-                    style: FilledButton.styleFrom(
-                      backgroundColor: cs.error,
+                  child: SizedBox(
+                    height: 42.h,
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(
+                        backgroundColor: cs.error,
+                      ),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          // Implement delete account logic
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: Text(
+                        t.t('profil.delete_account_confirm'),
+                        style: const TextStyle(fontSize: 16),
+                      ),
                     ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // Implement delete account logic
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: Text(t.t('profil.delete_account_confirm')),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 16.h),
           ],
         ),
       ),

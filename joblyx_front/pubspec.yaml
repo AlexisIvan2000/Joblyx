@@ -33,6 +33,14 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^5.0.0
   test: ^1.26.2
+  flutter_native_splash: ^2.4.7
+
+flutter_native_splash:
+  color: "#018786"
+  color_dark: "#018786"
+  android_12:
+    color: "#018786"
+    color_dark: "#018786"
 
 flutter:
   uses-material-design: true

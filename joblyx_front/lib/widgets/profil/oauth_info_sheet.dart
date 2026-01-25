@@ -31,51 +31,55 @@ class OAuthInfoSheet extends StatelessWidget {
     final t = AppLocalizations.of(context);
 
     return Padding(
-      padding: EdgeInsets.all(24.w),
+      padding: EdgeInsets.only(
+        left: 16.w,
+        right: 16.w,
+        top: 16.h,
+        bottom: 16.h,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 40.w,
-            height: 4.h,
-            decoration: BoxDecoration(
-              color: cs.onSurface.withValues(alpha: 0.3),
-              borderRadius: BorderRadius.circular(2.r),
-            ),
-          ),
-          SizedBox(height: 24.h),
-          Icon(
-            Icons.info_outline_rounded,
-            size: 48.sp,
-            color: cs.primary,
-          ),
-          SizedBox(height: 16.h),
           Text(
             t.t('profil.oauth_info_title'),
             style: textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
             ),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 12.h),
-          Text(
-            field == 'email'
-                ? t.t('profil.oauth_email_message')
-                : t.t('profil.oauth_password_message'),
-            style: textTheme.bodyMedium?.copyWith(
-              color: cs.onSurface.withValues(alpha: 0.7),
-            ),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 24.h),
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(t.t('profil.got_it')),
-            ),
           ),
           SizedBox(height: 16.h),
+          Row(
+            children: [
+              Icon(
+                Icons.info_outline_rounded,
+                size: 24.sp,
+                color: cs.primary,
+              ),
+              SizedBox(width: 12.w),
+              Expanded(
+                child: Text(
+                  field == 'email'
+                      ? t.t('profil.oauth_email_message')
+                      : t.t('profil.oauth_password_message'),
+                  style: textTheme.bodyMedium?.copyWith(
+                    color: cs.onSurface.withValues(alpha: 0.7),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 20.h),
+          SizedBox(
+            width: double.infinity,
+            height: 48.h,
+            child: FilledButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(
+                t.t('profil.got_it'),
+                style: const TextStyle(fontSize: 16),
+              ),
+            ),
+          ),
         ],
       ),
     );
