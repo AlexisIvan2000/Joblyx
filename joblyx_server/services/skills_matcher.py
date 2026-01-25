@@ -10,7 +10,7 @@ from langdetect import detect, LangDetectException
 class SkillsMatcher:
     _instance = None
 
-    AMBIGUOUS_SKILLS = {"C", "R", "D", "Go", "Rust", "Ruby", "Swift", "Dart", "Lua", "Slim", "Nest", "Echo", "Fiber", "Chi", "Rocket", "Ktor", "Remix", "Lit", "Bull", "Consul", "Make", "Flux", "Ray", "Salt", "Base", "Near", "Ada"}
+    AMBIGUOUS_SKILLS = {"C", "R", "D", "Go", "Rust", "Ruby", "Swift", "Dart", "Lua", "Slim", "Nest", "Echo", "Fiber", "Chi", "Rocket", "Ktor", "Remix", "Lit", "Bull", "Consul", "Make", "Flux", "Ray", "Salt", "Base", "Near", "Ada", "SES"}
 
     SKILL_CONTEXT_PATTERNS = {
         "C": [r"\bC\s+programming\b", r"\bC\s+language\b", r"\bC/C\+\+\b", r"\bC\s+developer\b", r"\bin\s+C\b", r"\bprogramming\s+in\s+C\b"],
@@ -32,6 +32,7 @@ class SkillsMatcher:
         "Echo": [r"\bEcho\s+framework\b", r"\bEcho\s+Go\b"],
         "Fiber": [r"\bFiber\s+Go\b", r"\bGoFiber\b"],
         "Bull": [r"\bBullMQ\b", r"\bBull\s+queue\b"],
+        "SES": [r"\bAWS\s+SES\b", r"\bSimple\s+Email\s+Service\b", r"\bAmazon\s+SES\b"],
     }
 
     def __new__(cls):
