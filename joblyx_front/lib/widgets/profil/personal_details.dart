@@ -6,18 +6,21 @@ import 'package:joblyx_front/services/app_localizations.dart';
 import 'package:joblyx_front/widgets/profil/edit_field_sheet.dart';
 import 'package:joblyx_front/widgets/profil/change_email.dart';
 import 'package:joblyx_front/widgets/profil/change_password.dart';
+import 'package:joblyx_front/widgets/profil/oauth_info_sheet.dart';
+import 'package:joblyx_front/widgets/profil/delete_account_sheet.dart';
 
 class PersonalDetails extends ConsumerWidget {
   const PersonalDetails({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    
+
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     final textTheme = theme.textTheme;
     final t = AppLocalizations.of(context);
     final userAsync = ref.watch(userProvider);
+    final isOAuthUser = ref.watch(isOAuthUserProvider);
 
     return userAsync.when(
       loading: () => Padding(
@@ -76,7 +79,9 @@ class PersonalDetails extends ConsumerWidget {
                 value: user.email.isNotEmpty ? user.email : 'user@gmail.com',
                 labelStyle: labelStyle,
                 valueStyle: valueStyle,
-                onTap: () => showChangeEmailSheet(context),
+                onTap: () => isOAuthUser
+                    ? showOAuthInfoSheet(context, 'email')
+                    : showChangeEmailSheet(context),
               ),
               _buildDivider(),
               _DetailTile(
@@ -84,7 +89,9 @@ class PersonalDetails extends ConsumerWidget {
                 value: '***********',
                 labelStyle: labelStyle,
                 valueStyle: valueStyle,
-                onTap: () => showChangePasswordSheet(context),
+                onTap: () => isOAuthUser
+                    ? showOAuthInfoSheet(context, 'password')
+                    : showChangePasswordSheet(context),
               ),
               _buildDivider(),
               ListTile(
@@ -93,7 +100,7 @@ class PersonalDetails extends ConsumerWidget {
                   style: labelStyle,
                 ),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () {},
+                onTap: () => showDeleteAccountSheet(context),
               ),
             ],
           ),

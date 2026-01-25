@@ -53,3 +53,19 @@ final userPictureCardProvider = Provider<AsyncValue<({String? profilePicture, Da
     createdAt: u?.createdAt,
   ))));
 });
+
+// Provider to check if user is authenticated via OAuth (LinkedIn, Google, etc.)
+final isOAuthUserProvider = Provider<bool>((ref) {
+  final authState = ref.watch(authStateProvider);
+  return authState.whenOrNull(
+    data: (state) {
+      final user = state.session?.user;
+      if (user == null) return false;
+
+      final identities = user.identities;
+      if (identities == null || identities.isEmpty) return false;
+
+      return identities.any((identity) => identity.provider != 'email');
+    },
+  ) ?? false;
+});

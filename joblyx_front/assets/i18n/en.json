@@ -92,8 +92,15 @@
     "change_email_message": "Enter the details below to receive your confirmation code.",
     "your_password": "Your password",
     "new_email": "New email address",
-    "confirm": "Confirm"
-
+    "confirm": "Confirm",
+    "oauth_info_title": "Modification not available",
+    "oauth_email_message": "You are logged in via LinkedIn. Your email address is managed by LinkedIn and cannot be changed here.",
+    "oauth_password_message": "You are logged in via LinkedIn. LinkedIn accounts do not have a Joblyx password. To change your credentials, please access your LinkedIn account settings.",
+    "delete_account_title": "Delete your account",
+    "delete_account_message": "This action is irreversible. All your personal data, history, and preferences will be permanently deleted.",
+    "delete_account_email_hint": "Enter your email to confirm",
+    "delete_account_email_mismatch": "Email does not match your account",
+    "delete_account_confirm": "Delete"
 
   },
 
