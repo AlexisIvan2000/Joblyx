@@ -13,6 +13,7 @@ class SearchSkills extends StatefulWidget {
 class _SearchSkillsState extends State<SearchSkills> {
   final _jobController = TextEditingController();
   String? _selectedProvince;
+  // ignore: unused_field
   String? _selectedCity;
 
   @override
@@ -77,7 +78,7 @@ class _SearchSkillsState extends State<SearchSkills> {
         // Utiliser ma localisation
         GestureDetector(
           onTap: () {
-            // TODO: Implémenter
+            //  Implémenter
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -99,7 +100,7 @@ class _SearchSkillsState extends State<SearchSkills> {
         // Bouton rechercher
         FilledButton.icon(
           onPressed: () {
-            // TODO: Implémenter
+            //  Implémenter
           },
           icon: const Icon(Icons.search),
           label: Text(t.t('home.search')),
