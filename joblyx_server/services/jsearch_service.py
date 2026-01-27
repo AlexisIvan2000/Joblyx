@@ -1,5 +1,14 @@
+import unicodedata
 import requests
 from config import RAPIDAPI_KEY
+
+
+def normalize_text(text: str) -> str:
+    # Décompose les caractères accentués (é → e + accent)
+    normalized = unicodedata.normalize("NFD", text)
+    # Supprime les accents (catégorie "Mn" = Mark, Nonspacing)
+    without_accents = "".join(c for c in normalized if unicodedata.category(c) != "Mn")
+    return without_accents
 
 
 class JSearchService:
@@ -12,18 +21,11 @@ class JSearchService:
         }
 
     def search_jobs(self, query: str, location: str = "", num_pages: int = 1) -> list[dict]:
-        """
-        Search for jobs using JSearch API.
-
-        Args:
-            query: Job title or keywords (e.g., "Software Developer")
-            location: Location string (e.g., "Toronto, Ontario, Canada")
-            num_pages: Number of pages to fetch (10 results per page)
-
-        Returns:
-            List of job dictionaries with description field
-        """
         all_jobs = []
+
+        # Normaliser pour des résultats cohérents (accents → sans accents)
+        query = normalize_text(query)
+        location = normalize_text(location)
 
         for page in range(1, num_pages + 1):
             params = {
@@ -51,23 +53,12 @@ class JSearchService:
                 all_jobs.extend(jobs)
 
             except requests.exceptions.RequestException as e:
-                print(f"Error fetching page {page}: {e}")
+                print(f"Erreur lors de la récupération de la page {page}: {e}")
                 break
 
         return all_jobs
 
     def get_job_descriptions(self, query: str, location: str = "", num_pages: int = 5) -> list[str]:
-        """
-        Get job descriptions for analysis.
-
-        Args:
-            query: Job title or keywords
-            location: Location string
-            num_pages: Number of pages to fetch
-
-        Returns:
-            List of job description strings
-        """
         jobs = self.search_jobs(query, location, num_pages)
         descriptions = []
 

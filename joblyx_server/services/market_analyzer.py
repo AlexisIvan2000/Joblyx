@@ -54,8 +54,7 @@ class MarketAnalyzer:
         self.matcher = skills_matcher
 
     def _get_min_percentage(self, total_jobs: int, category: str) -> float:
-        """Seuil dynamique selon le volume d'offres ET la catégorie."""
-        # Seuils de base selon le volume
+        # Seuil dynamique selon le volume d'offres ET la catégorie
         if total_jobs < 15:
             base_high = 15.0
             base_normal = 20.0
@@ -90,20 +89,6 @@ class MarketAnalyzer:
         min_per_category: int = 1,
         max_per_category: int = 5
     ) -> list[dict]:
-        """
-        Distribute top skills across categories to ensure diversity.
-
-        Args:
-            skill_counts: Counter of skill occurrences
-            skill_categories: Mapping of skill name to category
-            total_jobs: Total number of jobs analyzed
-            top_n: Total number of skills to return
-            min_per_category: Minimum skills per category (if available)
-            max_per_category: Maximum skills per category
-
-        Returns:
-            List of skill dicts with balanced category representation
-        """
         skills_by_cat = defaultdict(list)
         for skill_name, count in skill_counts.most_common():
             category = skill_categories.get(skill_name, "other")
@@ -169,20 +154,6 @@ class MarketAnalyzer:
         num_pages: int = 3,
         balanced: bool = True
     ) -> dict:
-        """
-        Analyze job market for a specific query and location.
-
-        Args:
-            query: Job title (e.g., "Software Developer")
-            city: City name (e.g., "Toronto")
-            province: Province name (e.g., "Ontario")
-            top_n: Number of top skills to return (20-30)
-            num_pages: Number of pages to fetch from JSearch
-            balanced: If True, distribute skills across categories
-
-        Returns:
-            Dictionary with analysis results including top skills
-        """
         location = f"{city}, {province}, Canada"
 
         descriptions = self.jsearch.get_job_descriptions(
@@ -251,9 +222,6 @@ class MarketAnalyzer:
         num_pages: int = 3,
         max_per_category: int = 5
     ) -> dict:
-        """
-        Get skills grouped by category with filtering and ordering.
-        """
         location = f"{city}, {province}, Canada"
 
         descriptions = self.jsearch.get_job_descriptions(

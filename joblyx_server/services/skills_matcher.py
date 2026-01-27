@@ -59,13 +59,12 @@ class SkillsMatcher:
         self.matcher_fr = self._build_matcher(self.nlp_fr)
 
     def _load_skills(self) -> dict:
-        """Load skills from skills.json file."""
         skills_path = Path(__file__).parent.parent / "data" / "skills.json"
         with open(skills_path, "r", encoding="utf-8") as f:
             return json.load(f)
 
     def _build_skill_mappings(self):
-        """Build mapping from skill names/variants to canonical names and categories."""
+        # Construit le mapping skill → catégorie
         it_skills = self.skills_data.get("IT", {})
 
         for category, skills in it_skills.items():
@@ -90,7 +89,6 @@ class SkillsMatcher:
                         self.all_patterns.append(variant.lower())
 
     def _build_matcher(self, nlp) -> PhraseMatcher:
-        """Build PhraseMatcher with all skill patterns."""
         matcher = PhraseMatcher(nlp.vocab, attr="LOWER")
 
         patterns = []
@@ -107,15 +105,6 @@ class SkillsMatcher:
         return matcher
 
     def detect_language(self, text: str) -> str:
-        """
-        Detect the language of the text.
-
-        Args:
-            text: Text to analyze
-
-        Returns:
-            Language code ("en" or "fr"), defaults to "en"
-        """
         try:
             lang = detect(text[:1000])
             return "fr" if lang == "fr" else "en"
@@ -123,15 +112,7 @@ class SkillsMatcher:
             return "en"
 
     def _check_ambiguous_skills(self, text: str) -> set[str]:
-        """
-        Check for ambiguous skills using context patterns.
-
-        Args:
-            text: Text to analyze
-
-        Returns:
-            Set of validated ambiguous skill names
-        """
+        # Vérifie les skills ambigus avec des patterns de contexte
         found = set()
         text_upper = text
 
@@ -144,16 +125,6 @@ class SkillsMatcher:
         return found
 
     def extract_skills(self, text: str) -> list[str]:
-        """
-        Extract skills from text using SpaCy PhraseMatcher.
-        Automatically detects language.
-
-        Args:
-            text: Job description text
-
-        Returns:
-            List of unique skill names found in the text
-        """
         if not text:
             return []
 
@@ -184,15 +155,6 @@ class SkillsMatcher:
         return list(found_skills)
 
     def extract_skills_with_category(self, text: str) -> list[dict]:
-        """
-        Extract skills from text with their categories.
-
-        Args:
-            text: Job description text
-
-        Returns:
-            List of dicts with name and category
-        """
         if not text:
             return []
 
