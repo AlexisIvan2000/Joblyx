@@ -66,7 +66,15 @@
     },
     
     "home": {
-        "welcome": "Bienvenue"
+        "welcome": "Bienvenue",
+        "search_skills": "Rechercher des compétences",
+        "enter_job": "Entrez un titre de poste...",
+        "city": "Ville",
+        "province": "Province",
+        "use_location": "Utiliser ma localisation",
+        "search": "Rechercher",
+        "select_city": "Sélectionnez une ville",
+        "select_province": "Sélectionnez une province"
     },
 
     "profil": {

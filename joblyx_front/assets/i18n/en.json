@@ -65,7 +65,15 @@
   },
 
   "home": {
-    "welcome": "Welcome"  
+    "welcome": "Welcome",
+    "search_skills": "Search skills",
+    "enter_job": "Enter a job title...",
+    "city": "City",
+    "province": "Province",
+    "use_location": "Use my location",
+    "search": "Search",
+    "select_city": "Select a city",
+    "select_province": "Select a province"
   },
 
   "profil":{
@@ -183,6 +191,7 @@
     "success_message": "Your email has been successfully verified.",
     "send_message": "A verification code has been sent to your email."
   }
+  
 
 
 }

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:joblyx_front/providers/user_provider.dart';
 import 'package:joblyx_front/providers/location_provider.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
+import 'package:joblyx_front/widgets/home/search_skills.dart';
 import 'package:joblyx_front/widgets/profile_avatar.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -45,7 +46,22 @@ class HomeScreen extends ConsumerWidget {
           },
         ),
       ),
-      body: const Center(child: Text('Home Screen')),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(20.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              t.t('home.search_skills'),
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            SizedBox(height: 10.h),
+            const SearchSkills(),
+          ],
+        ),
+      ),
     );
   }
 }
