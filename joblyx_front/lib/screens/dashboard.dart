@@ -89,9 +89,9 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
             label: t.t('nav.home')
           ),
           NavigationDestination(
-            icon: Icon(Icons.analytics_outlined, size: 25.r),
-            selectedIcon: Icon(Icons.analytics, size: 25.r),
-            label: t.t('nav.analysis')
+            icon: Icon(Icons.tips_and_updates_outlined, size: 25.r),
+            selectedIcon: Icon(Icons.tips_and_updates, size: 25.r),
+            label: t.t('nav.advice')
           ),
           NavigationDestination(
             icon: Icon(Icons.description_outlined, size: 25.r),

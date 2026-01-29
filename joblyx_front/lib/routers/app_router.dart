@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:joblyx_front/routers/routes.dart';
 import 'package:joblyx_front/screens/dashboard.dart';
 import 'package:joblyx_front/screens/login.dart';
-import 'package:joblyx_front/screens/menu/analysis.dart';
+import 'package:joblyx_front/screens/menu/advice.dart';
 import 'package:joblyx_front/screens/menu/cv.dart';
 import 'package:joblyx_front/screens/menu/home.dart';
 import 'package:joblyx_front/screens/menu/profil.dart';
@@ -151,8 +151,8 @@ final appRouter = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: AppRoutes.analysis,
-              builder: (_, __) => const AnalysisScreen(),
+              path: AppRoutes.advice,
+              builder: (_, __) => const AdviceScreen(),
             ),
           ],
         ),

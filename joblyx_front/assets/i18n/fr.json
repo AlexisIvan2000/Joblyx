@@ -60,7 +60,7 @@
     
     "nav": {
         "home": "Accueil",
-        "analysis": "Analyse",
+        "advice": "Conseil",
         "cv": "CV",
         "profile": "Profil"
     },
@@ -203,5 +203,18 @@
         "resent": "Code renvoyé avec succès.",
         "success_message": "Votre email a été vérifié avec succès.",
         "send_message": "Un code de vérification a été envoyé à votre email."
+    },
+
+    "advice": {
+        "title": "Conseils",
+        "description": "Collez la description du poste ci-dessous pour obtenir des conseils personnalisés sur l'amélioration de votre CV et la préparation aux entretiens.",
+        "paste": "Collez la description du poste ici...",
+        "choose_cv": "Choisir un CV",
+        "upload_cv": "Télécharger un CV",
+        "submit": "Soumettre",
+        "disclaimer": "Les conseils sont générés par l'IA et doivent être vérifiés pour leur exactitude."
+
+
+
     }
 }
