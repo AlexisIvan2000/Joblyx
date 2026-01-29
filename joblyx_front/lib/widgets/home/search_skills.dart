@@ -48,11 +48,9 @@ class _SearchSkillsState extends ConsumerState<SearchSkills> {
     setState(() => _isLoading = true);
 
     try {
-      await ref.read(marketAnalysisProvider.notifier).analyze(
-            job: job,
-            city: city,
-            province: province,
-          );
+      await ref
+          .read(marketAnalysisProvider.notifier)
+          .analyze(job: job, city: city, province: province);
 
       if (!mounted) return;
 
@@ -67,7 +65,9 @@ class _SearchSkillsState extends ConsumerState<SearchSkills> {
         error: (_, __) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(AppLocalizations.of(context).t('err.network_error')),
+              content: Text(
+                AppLocalizations.of(context).t('err.network_error'),
+              ),
             ),
           );
         },
@@ -194,9 +194,11 @@ class _SearchSkillsState extends ConsumerState<SearchSkills> {
     return category
         .replaceAll('_', ' ')
         .split(' ')
-        .map((word) => word.isNotEmpty
-            ? '${word[0].toUpperCase()}${word.substring(1)}'
-            : '')
+        .map(
+          (word) => word.isNotEmpty
+              ? '${word[0].toUpperCase()}${word.substring(1)}'
+              : '',
+        )
         .join(' ');
   }
 
@@ -254,9 +256,7 @@ class _SearchSkillsState extends ConsumerState<SearchSkills> {
               ),
               Text(
                 '${skill.count} jobs',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: cs.outline,
-                ),
+                style: theme.textTheme.bodySmall?.copyWith(color: cs.outline),
               ),
             ],
           ),
@@ -325,7 +325,7 @@ class _SearchSkillsState extends ConsumerState<SearchSkills> {
             ),
           ],
         ),
-        SizedBox(height: 8.h),
+        SizedBox(height: 12.h),
 
         // Utiliser ma localisation
         GestureDetector(
@@ -333,7 +333,7 @@ class _SearchSkillsState extends ConsumerState<SearchSkills> {
             //  Implémenter
           },
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.my_location, color: cs.primary, size: 18.sp),
               SizedBox(width: 4.w),
@@ -347,7 +347,7 @@ class _SearchSkillsState extends ConsumerState<SearchSkills> {
             ],
           ),
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: 20.h),
 
         // Bouton rechercher
         FilledButton.icon(
@@ -395,12 +395,14 @@ class _SearchSkillsState extends ConsumerState<SearchSkills> {
           child: TextButton.icon(
             onPressed: () {
               // Implémenter
-            }, 
-            label: Text(t.t('home.history')),
-            icon: Icon(Icons.history, color: cs.primary),
+            },
+            label: Text(
+              t.t('home.history'),
+              style: TextStyle(color: cs.secondary),
+            ),
+            icon: Icon(Icons.history, color: cs.secondary),
           ),
-        )
-        
+        ),
       ],
     );
   }
@@ -422,7 +424,9 @@ class _SearchSkillsState extends ConsumerState<SearchSkills> {
       onSelected: onSelected,
       fieldViewBuilder: (context, textController, focusNode, onSubmitted) {
         // Sync external controller with autocomplete's internal controller
-        if (controller != null && controller.text.isNotEmpty && textController.text.isEmpty) {
+        if (controller != null &&
+            controller.text.isNotEmpty &&
+            textController.text.isEmpty) {
           textController.text = controller.text;
         }
         return TextField(
