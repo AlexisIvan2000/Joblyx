@@ -111,6 +111,25 @@ class _SearchSkillsState extends State<SearchSkills> {
             ),
           ),
         ),
+        SizedBox(height: 12.h),
+
+        // Disclaimer
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(Icons.info_outline, size: 14.sp, color: cs.outline),
+            SizedBox(width: 6.w),
+            Expanded(
+              child: Text(
+                t.t('home.disclaimer'),
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: cs.outline,
+                  fontSize: 11.sp,
+                ),
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }

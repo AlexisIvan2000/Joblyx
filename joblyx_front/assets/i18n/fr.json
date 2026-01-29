@@ -74,7 +74,8 @@
         "use_location": "Utiliser ma localisation",
         "search": "Rechercher",
         "select_city": "Sélectionnez une ville",
-        "select_province": "Sélectionnez une province"
+        "select_province": "Sélectionnez une province",
+        "disclaimer": "Résultats basés sur l'analyse de dizaines d'offres d'emploi récentes dans votre région."
     },
 
     "profil": {
