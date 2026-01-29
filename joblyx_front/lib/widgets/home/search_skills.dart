@@ -365,9 +365,6 @@ class _SearchSkillsState extends ConsumerState<SearchSkills> {
           label: Text(_isLoading ? t.t('home.searching') : t.t('home.search')),
           style: FilledButton.styleFrom(
             padding: EdgeInsets.symmetric(vertical: 14.h),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
           ),
         ),
         SizedBox(height: 12.h),

@@ -33,7 +33,7 @@ class AdviceScreen extends StatelessWidget {
             SizedBox(height: 15.h),
             TextField(
               keyboardType: TextInputType.multiline,
-              minLines: 6,
+              minLines: 10,
               maxLines: 20,
               decoration: InputDecoration(
                 hintText: t.t('advice.paste'),
