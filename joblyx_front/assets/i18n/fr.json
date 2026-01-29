@@ -73,9 +73,16 @@
         "province": "Province",
         "use_location": "Utiliser ma localisation",
         "search": "Rechercher",
+        "searching": "Recherche...",
+        "fill_all_fields": "Veuillez remplir tous les champs",
         "select_city": "Sélectionnez une ville",
         "select_province": "Sélectionnez une province",
         "disclaimer": "Résultats basés sur l'analyse de dizaines d'offres d'emploi récentes dans votre région."
+    },
+
+    "analysis": {
+        "results_title": "Compétences demandées",
+        "jobs_analyzed": "offres analysées"
     },
 
     "profil": {
@@ -176,8 +183,10 @@
     "flow_state_expired": "L'état du flux a expiré. Veuillez vous reconnecter.",
     "flow_state_not_found": "L'état du flux est introuvable. Veuillez vous reconnecter.",
     "identity_already_exists": "Un compte existe déjà avec le même fournisseur d'identité.",
-    "oauth_provider_not_supported": "L'OAuth LinkedIn a été désactivé"
-    
+    "oauth_provider_not_supported": "L'OAuth LinkedIn a été désactivé",
+    "network_error": "Erreur de connexion. Vérifiez votre connexion internet.",
+    "api_error": "Erreur du serveur. Veuillez réessayer plus tard."
+
 
   },
 

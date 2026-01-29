@@ -72,9 +72,16 @@
     "province": "Province",
     "use_location": "Use my location",
     "search": "Search",
+    "searching": "Searching...",
+    "fill_all_fields": "Please fill in all fields",
     "select_city": "Select a city",
     "select_province": "Select a province",
     "disclaimer": "Results based on analysis of dozens of recent job postings in your area."
+  },
+
+  "analysis": {
+    "results_title": "In-demand skills",
+    "jobs_analyzed": "jobs analyzed"
   },
 
   "profil":{
@@ -176,7 +183,9 @@
     "flow_state_expired": "The flow state has expired. Login again.",
     "flow_state_not_found": "The flow state was not found. Login again.",
     "identity_already_exists": "An account already exists with the same identity provider.",
-    "oauth_provider_not_supported": "The LinkedIn OAuth was disabled"
+    "oauth_provider_not_supported": "The LinkedIn OAuth was disabled",
+    "network_error": "Connection error. Please check your internet connection.",
+    "api_error": "Server error. Please try again later."
   },
 
   "code_verification": {
