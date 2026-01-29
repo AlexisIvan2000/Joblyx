@@ -389,20 +389,6 @@ class _SearchSkillsState extends ConsumerState<SearchSkills> {
             ),
           ],
         ),
-        SizedBox(height: 12.h),
-        Align(
-          alignment: Alignment.centerRight,
-          child: TextButton.icon(
-            onPressed: () {
-              // Implémenter
-            },
-            label: Text(
-              t.t('home.history'),
-              style: TextStyle(color: cs.secondary),
-            ),
-            icon: Icon(Icons.history, color: cs.secondary),
-          ),
-        ),
       ],
     );
   }

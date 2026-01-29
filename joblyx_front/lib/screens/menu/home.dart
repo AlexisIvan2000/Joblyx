@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:joblyx_front/providers/user_provider.dart';
 import 'package:joblyx_front/providers/location_provider.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
+import 'package:joblyx_front/widgets/home/search_history.dart';
 import 'package:joblyx_front/widgets/home/search_skills.dart';
 import 'package:joblyx_front/widgets/profile_avatar.dart';
 
@@ -59,6 +60,15 @@ class HomeScreen extends ConsumerWidget {
             ),
             SizedBox(height: 10.h),
             const SearchSkills(),
+            SizedBox(height: 25.h),
+            Text(
+              t.t('home.history'),
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            SizedBox(height: 10.h),
+            const SearchHistory(),
           ],
         ),
       ),
