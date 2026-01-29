@@ -77,7 +77,8 @@
         "fill_all_fields": "Veuillez remplir tous les champs",
         "select_city": "Sélectionnez une ville",
         "select_province": "Sélectionnez une province",
-        "disclaimer": "Résultats basés sur l'analyse de dizaines d'offres d'emploi récentes dans votre région."
+        "disclaimer": "Résultats basés sur l'analyse de dizaines d'offres d'emploi récentes dans votre région.",
+        "history": "Historique de recherche"
     },
 
     "analysis": {

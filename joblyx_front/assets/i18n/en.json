@@ -76,7 +76,8 @@
     "fill_all_fields": "Please fill in all fields",
     "select_city": "Select a city",
     "select_province": "Select a province",
-    "disclaimer": "Results based on analysis of dozens of recent job postings in your area."
+    "disclaimer": "Results based on analysis of dozens of recent job postings in your area.",
+    "history": "Search history"
   },
 
   "analysis": {

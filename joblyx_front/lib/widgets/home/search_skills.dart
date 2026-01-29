@@ -234,23 +234,11 @@ class _SearchSkillsState extends ConsumerState<SearchSkills> {
           SizedBox(width: 12.w),
           // Skill info
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  skill.name,
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(height: 2.h),
-                Text(
-                  skill.category.replaceAll('_', ' '),
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: cs.outline,
-                  ),
-                ),
-              ],
+            child: Text(
+              skill.name,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
           // Percentage
@@ -401,6 +389,18 @@ class _SearchSkillsState extends ConsumerState<SearchSkills> {
             ),
           ],
         ),
+        SizedBox(height: 12.h),
+        Align(
+          alignment: Alignment.centerRight,
+          child: TextButton.icon(
+            onPressed: () {
+              // Implémenter
+            }, 
+            label: Text(t.t('home.history')),
+            icon: Icon(Icons.history, color: cs.primary),
+          ),
+        )
+        
       ],
     );
   }
