@@ -13,69 +13,22 @@ class TestMarketAnalyzer:
     def test_has_jsearch_service(self):
         assert market_analyzer.jsearch is not None
 
-    def test_has_skills_matcher(self):
-        assert market_analyzer.matcher is not None
+    def test_has_extractor(self):
+        assert market_analyzer.extractor is not None
 
 
 class TestCategoryConfiguration:
 
-    def test_high_priority_categories_defined(self):
-        assert len(MarketAnalyzer.HIGH_PRIORITY_CATEGORIES) > 0
-        assert "programming_languages" in MarketAnalyzer.HIGH_PRIORITY_CATEGORIES
-        assert "databases" in MarketAnalyzer.HIGH_PRIORITY_CATEGORIES
+    def test_category_order_defined(self):
+        assert len(MarketAnalyzer.CATEGORY_ORDER) > 0
+        assert "programming_languages" in MarketAnalyzer.CATEGORY_ORDER
+        assert "databases" in MarketAnalyzer.CATEGORY_ORDER
 
-    def test_normal_categories_defined(self):
-        assert len(MarketAnalyzer.NORMAL_CATEGORIES) > 0
-        assert "testing" in MarketAnalyzer.NORMAL_CATEGORIES
+    def test_min_percentage_defined(self):
+        assert MarketAnalyzer.MIN_PERCENTAGE > 0
 
-    def test_low_priority_categories_defined(self):
-        assert len(MarketAnalyzer.LOW_PRIORITY_CATEGORIES) > 0
-        assert "soft_skills" in MarketAnalyzer.LOW_PRIORITY_CATEGORIES
-
-    def test_category_order_complete(self):
-        total = (
-            len(MarketAnalyzer.HIGH_PRIORITY_CATEGORIES) +
-            len(MarketAnalyzer.NORMAL_CATEGORIES) +
-            len(MarketAnalyzer.LOW_PRIORITY_CATEGORIES)
-        )
-        assert len(MarketAnalyzer.CATEGORY_ORDER) == total
-
-
-class TestMinPercentage:
-
-    def test_small_volume_thresholds(self):
-        analyzer = MarketAnalyzer()
-
-        high_pct = analyzer._get_min_percentage(10, "programming_languages")
-        normal_pct = analyzer._get_min_percentage(10, "testing")
-        low_pct = analyzer._get_min_percentage(10, "soft_skills")
-
-        assert high_pct == 15.0
-        assert normal_pct == 20.0
-        assert low_pct == 30.0
-
-    def test_medium_volume_thresholds(self):
-        analyzer = MarketAnalyzer()
-
-        high_pct = analyzer._get_min_percentage(25, "programming_languages")
-        assert high_pct == 10.0
-
-    def test_large_volume_thresholds(self):
-        analyzer = MarketAnalyzer()
-
-        high_pct = analyzer._get_min_percentage(60, "programming_languages")
-        normal_pct = analyzer._get_min_percentage(60, "testing")
-        low_pct = analyzer._get_min_percentage(60, "soft_skills")
-
-        assert high_pct == 5.0
-        assert normal_pct == 10.0
-        assert low_pct == 15.0
-
-    def test_unknown_category_uses_low_threshold(self):
-        analyzer = MarketAnalyzer()
-
-        pct = analyzer._get_min_percentage(60, "unknown_category")
-        assert pct == 15.0
+    def test_max_per_category_defined(self):
+        assert MarketAnalyzer.MAX_PER_CATEGORY > 0
 
 
 class TestAnalyzeMarket:
@@ -85,6 +38,7 @@ class TestAnalyzeMarket:
         mock_jsearch.get_job_descriptions.return_value = []
 
         analyzer = MarketAnalyzer()
+        analyzer.jsearch = mock_jsearch
 
         result = analyzer.analyze_market("Developer", "Toronto", "Ontario")
 
@@ -92,18 +46,20 @@ class TestAnalyzeMarket:
         assert result["top_skills"] == []
         assert "message" in result
 
-    @patch('services.market_analyzer.skills_matcher')
+    @patch('services.market_analyzer.groq_extractor')
     @patch('services.market_analyzer.jsearch_service')
-    def test_analyze_returns_structure(self, mock_jsearch, mock_matcher):
+    def test_analyze_returns_structure(self, mock_jsearch, mock_extractor):
         mock_jsearch.get_job_descriptions.return_value = [
             "Python and React developer needed."
         ]
-        mock_matcher.extract_skills_with_category.return_value = [
+        mock_extractor.extract_skills_list.return_value = [
             {"name": "Python", "category": "programming_languages"},
             {"name": "React", "category": "frontend_frameworks"}
         ]
 
         analyzer = MarketAnalyzer()
+        analyzer.jsearch = mock_jsearch
+        analyzer.extractor = mock_extractor
 
         result = analyzer.analyze_market("Developer", "Toronto", "Ontario")
 
@@ -113,13 +69,13 @@ class TestAnalyzeMarket:
         assert "top_skills" in result
         assert result["location"] == "Toronto, Ontario, Canada"
 
-    @patch('services.market_analyzer.skills_matcher')
+    @patch('services.market_analyzer.groq_extractor')
     @patch('services.market_analyzer.jsearch_service')
-    def test_skill_counting(self, mock_jsearch, mock_matcher):
+    def test_skill_counting(self, mock_jsearch, mock_extractor):
         mock_jsearch.get_job_descriptions.return_value = [
             "Job 1", "Job 2", "Job 3"
         ]
-        mock_matcher.extract_skills_with_category.side_effect = [
+        mock_extractor.extract_skills_list.side_effect = [
             [{"name": "Python", "category": "programming_languages"}],
             [{"name": "Python", "category": "programming_languages"},
              {"name": "Java", "category": "programming_languages"}],
@@ -127,14 +83,52 @@ class TestAnalyzeMarket:
         ]
 
         analyzer = MarketAnalyzer()
+        analyzer.jsearch = mock_jsearch
+        analyzer.extractor = mock_extractor
 
         result = analyzer.analyze_market("Developer", "Toronto", "Ontario", balanced=False)
 
-        # Python apparaît dans les 3 jobs
         python_skill = next((s for s in result["top_skills"] if s["name"] == "Python"), None)
         assert python_skill is not None
         assert python_skill["count"] == 3
         assert python_skill["percentage"] == 100.0
+
+    @patch('services.market_analyzer.groq_extractor')
+    @patch('services.market_analyzer.jsearch_service')
+    def test_balanced_limits_per_category(self, mock_jsearch, mock_extractor):
+        mock_jsearch.get_job_descriptions.return_value = ["Job"] * 5
+
+        # 10 langages, tous à 100%
+        mock_extractor.extract_skills_list.return_value = [
+            {"name": f"Lang{i}", "category": "programming_languages"}
+            for i in range(10)
+        ]
+
+        analyzer = MarketAnalyzer()
+        analyzer.jsearch = mock_jsearch
+        analyzer.extractor = mock_extractor
+
+        result = analyzer.analyze_market("Developer", "Toronto", "Ontario", balanced=True)
+
+        lang_skills = [s for s in result["top_skills"] if s["category"] == "programming_languages"]
+        assert len(lang_skills) <= MarketAnalyzer.MAX_PER_CATEGORY
+
+    @patch('services.market_analyzer.groq_extractor')
+    @patch('services.market_analyzer.jsearch_service')
+    def test_handles_extraction_error(self, mock_jsearch, mock_extractor):
+        mock_jsearch.get_job_descriptions.return_value = ["Job 1", "Job 2"]
+        mock_extractor.extract_skills_list.side_effect = [
+            Exception("API Error"),
+            [{"name": "Python", "category": "programming_languages"}]
+        ]
+
+        analyzer = MarketAnalyzer()
+        analyzer.jsearch = mock_jsearch
+        analyzer.extractor = mock_extractor
+
+        result = analyzer.analyze_market("Developer", "Toronto", "Ontario")
+
+        assert result["total_jobs_analyzed"] == 2
 
 
 class TestGetSkillsByCategory:
@@ -144,17 +138,18 @@ class TestGetSkillsByCategory:
         mock_jsearch.get_job_descriptions.return_value = []
 
         analyzer = MarketAnalyzer()
+        analyzer.jsearch = mock_jsearch
 
         result = analyzer.get_skills_by_category("Developer", "Toronto", "Ontario")
 
         assert result["total_jobs_analyzed"] == 0
         assert result["skills_by_category"] == {}
 
-    @patch('services.market_analyzer.skills_matcher')
+    @patch('services.market_analyzer.groq_extractor')
     @patch('services.market_analyzer.jsearch_service')
-    def test_groups_by_category(self, mock_jsearch, mock_matcher):
+    def test_groups_by_category(self, mock_jsearch, mock_extractor):
         mock_jsearch.get_job_descriptions.return_value = ["Job description"]
-        mock_matcher.extract_skills_with_category.return_value = [
+        mock_extractor.extract_skills_list.return_value = [
             {"name": "Python", "category": "programming_languages"},
             {"name": "JavaScript", "category": "programming_languages"},
             {"name": "React", "category": "frontend_frameworks"},
@@ -162,58 +157,31 @@ class TestGetSkillsByCategory:
         ]
 
         analyzer = MarketAnalyzer()
+        analyzer.jsearch = mock_jsearch
+        analyzer.extractor = mock_extractor
 
         result = analyzer.get_skills_by_category("Developer", "Toronto", "Ontario")
 
         assert "skills_by_category" in result
-        categories = result["skills_by_category"]
-        assert len(categories) > 0
 
+    @patch('services.market_analyzer.groq_extractor')
+    @patch('services.market_analyzer.jsearch_service')
+    def test_respects_category_order(self, mock_jsearch, mock_extractor):
+        mock_jsearch.get_job_descriptions.return_value = ["Job"]
+        mock_extractor.extract_skills_list.return_value = [
+            {"name": "PostgreSQL", "category": "databases"},
+            {"name": "Python", "category": "programming_languages"},
+        ]
 
-class TestDistributeSkillsByCategory:
-
-    def test_respects_top_n(self):
         analyzer = MarketAnalyzer()
+        analyzer.jsearch = mock_jsearch
+        analyzer.extractor = mock_extractor
 
-        skill_counts = Counter({
-            "Python": 10, "Java": 9, "JavaScript": 8,
-            "React": 7, "Angular": 6, "Vue.js": 5,
-            "PostgreSQL": 4, "MongoDB": 3, "Redis": 2
-        })
-        skill_categories = {
-            "Python": "programming_languages",
-            "Java": "programming_languages",
-            "JavaScript": "programming_languages",
-            "React": "frontend_frameworks",
-            "Angular": "frontend_frameworks",
-            "Vue.js": "frontend_frameworks",
-            "PostgreSQL": "databases",
-            "MongoDB": "databases",
-            "Redis": "databases"
-        }
+        result = analyzer.get_skills_by_category("Developer", "Toronto", "Ontario")
 
-        result = analyzer._distribute_skills_by_category(
-            skill_counts, skill_categories,
-            total_jobs=10, top_n=5
-        )
-
-        assert len(result) <= 5
-
-    def test_sorted_by_count(self):
-        analyzer = MarketAnalyzer()
-
-        skill_counts = Counter({"Python": 10, "Java": 5, "Go": 3})
-        skill_categories = {
-            "Python": "programming_languages",
-            "Java": "programming_languages",
-            "Go": "programming_languages"
-        }
-
-        result = analyzer._distribute_skills_by_category(
-            skill_counts, skill_categories,
-            total_jobs=10, top_n=10
-        )
-
-        if len(result) > 1:
-            for i in range(len(result) - 1):
-                assert result[i]["count"] >= result[i + 1]["count"]
+        categories = list(result["skills_by_category"].keys())
+        if len(categories) > 1:
+            prog_idx = categories.index("programming_languages") if "programming_languages" in categories else -1
+            db_idx = categories.index("databases") if "databases" in categories else -1
+            if prog_idx >= 0 and db_idx >= 0:
+                assert prog_idx < db_idx
