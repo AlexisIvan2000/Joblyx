@@ -2,6 +2,7 @@ import asyncio
 from collections import Counter, defaultdict
 from services.jsearch_service import jsearch_service
 from services.groq_service import groq_extractor
+from services.cache_service  import cache_service
 
 
 class MarketAnalyzer:
@@ -43,9 +44,11 @@ class MarketAnalyzer:
     def __init__(self):
         self.jsearch = jsearch_service
         self.extractor = groq_extractor
-
+        self.cache = cache_service
+    
+    # Traite les résultats d'extraction pour obtenir skills et catégories
     def _process_skills_results(self, results: list[list[dict]]) -> tuple[list, dict]:
-        """Traite les résultats d'extraction pour obtenir skills et catégories"""
+        
         all_skills = []
         skill_categories = {}
 
@@ -58,7 +61,8 @@ class MarketAnalyzer:
                     skill_categories[skill_name] = category
 
         return all_skills, skill_categories
-
+    
+    # Analyse le marché avec Groq pour l'extraction
     async def analyze_market(
         self,
         query: str,
@@ -68,10 +72,15 @@ class MarketAnalyzer:
         balanced: bool = True,
         num_pages: int = 3,
     ) -> dict:
-        """Analyse le marché et retourne les top skills"""
+        
 
         location = f"{city}, {province}, Canada"
-
+        # Verifier le cache
+        cached = self.cache.get_cache_results(query, city, province)
+        if cached:
+            return cached
+        
+        # Récupérer les descriptions des offres (JSearch)
         descriptions = self.jsearch.get_job_descriptions(
             query=query,
             location=location,
@@ -122,12 +131,17 @@ class MarketAnalyzer:
             if len(top_skills) >= top_n:
                 break
 
-        return {
+        result = {
             "query": query,
             "location": location,
             "total_jobs_analyzed": total_jobs,
             "top_skills": top_skills
         }
+
+        # Sauvegarder dans le cache
+        self.cache.save_to_cache(query, city, province, result, total_jobs)
+
+        return result
 
     async def get_skills_by_category(
         self,
@@ -139,6 +153,11 @@ class MarketAnalyzer:
         """Analyse le marché avec Groq pour l'extraction"""
 
         location = f"{city}, {province}, Canada"
+
+        # Vérifier le cache
+        cached = self.cache.get_cache_results(query, city, province)
+        if cached:
+            return cached
 
         descriptions = self.jsearch.get_job_descriptions(
             query=query,
@@ -185,12 +204,17 @@ class MarketAnalyzer:
                 if limited:
                     ordered[category] = limited
 
-        return {
+        result = {
             "query": query,
             "location": location,
             "total_jobs_analyzed": total_jobs,
             "skills_by_category": ordered
         }
+
+        # Sauvegarder dans le cache
+        self.cache.save_to_cache(query, city, province, result, total_jobs)
+
+        return result
 
 
 market_analyzer = MarketAnalyzer()
