@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Query, HTTPException
 from data.models import MarketAnalysisResponse, SkillsByCategoryResponse
-from services.market_analyzer import market_analyzer
+from services.market_analysis import market_analyzer
 
 
 router = APIRouter(prefix="/market", tags=["Market Analysis"])

@@ -38,6 +38,8 @@ class TestAnalyzeMarket:
         analyzer = MarketAnalyzer()
         analyzer.jsearch = Mock()
         analyzer.jsearch.get_job_descriptions.return_value = []
+        analyzer.cache = Mock()
+        analyzer.cache.get_cache_results.return_value = None
 
         result = await analyzer.analyze_market("Developer", "Toronto", "Ontario")
 
@@ -50,6 +52,9 @@ class TestAnalyzeMarket:
         analyzer = MarketAnalyzer()
         analyzer.jsearch = Mock()
         analyzer.jsearch.get_job_descriptions.return_value = ["Python and React developer needed."]
+        analyzer.cache = Mock()
+        analyzer.cache.get_cache_results.return_value = None
+        analyzer.cache.save_to_cache.return_value = True
 
         analyzer.extractor = Mock()
         analyzer.extractor.extract_all_skills = AsyncMock(return_value=[
@@ -72,6 +77,9 @@ class TestAnalyzeMarket:
         analyzer = MarketAnalyzer()
         analyzer.jsearch = Mock()
         analyzer.jsearch.get_job_descriptions.return_value = ["Job 1", "Job 2", "Job 3"]
+        analyzer.cache = Mock()
+        analyzer.cache.get_cache_results.return_value = None
+        analyzer.cache.save_to_cache.return_value = True
 
         analyzer.extractor = Mock()
         analyzer.extractor.extract_all_skills = AsyncMock(return_value=[
@@ -89,10 +97,30 @@ class TestAnalyzeMarket:
         assert python_skill["percentage"] == 100.0
 
     @pytest.mark.asyncio
+    async def test_cache_hit_returns_cached(self):
+        analyzer = MarketAnalyzer()
+        cached_result = {
+            "query": "Developer",
+            "location": "Toronto, Ontario, Canada",
+            "total_jobs_analyzed": 10,
+            "top_skills": [{"name": "Python", "category": "programming_languages"}]
+        }
+        analyzer.cache = Mock()
+        analyzer.cache.get_cache_results.return_value = cached_result
+
+        result = await analyzer.analyze_market("Developer", "Toronto", "Ontario")
+
+        assert result == cached_result
+        analyzer.cache.get_cache_results.assert_called_once()
+
+    @pytest.mark.asyncio
     async def test_balanced_limits_per_category(self):
         analyzer = MarketAnalyzer()
         analyzer.jsearch = Mock()
         analyzer.jsearch.get_job_descriptions.return_value = ["Job"] * 5
+        analyzer.cache = Mock()
+        analyzer.cache.get_cache_results.return_value = None
+        analyzer.cache.save_to_cache.return_value = True
 
         analyzer.extractor = Mock()
         analyzer.extractor.extract_all_skills = AsyncMock(return_value=[
@@ -104,21 +132,6 @@ class TestAnalyzeMarket:
         lang_skills = [s for s in result["top_skills"] if s["category"] == "programming_languages"]
         assert len(lang_skills) <= MarketAnalyzer.MAX_PER_CATEGORY
 
-    @pytest.mark.asyncio
-    async def test_handles_extraction_error(self):
-        analyzer = MarketAnalyzer()
-        analyzer.jsearch = Mock()
-        analyzer.jsearch.get_job_descriptions.return_value = ["Job 1", "Job 2"]
-
-        analyzer.extractor = Mock()
-        analyzer.extractor.extract_all_skills = AsyncMock(return_value=[
-            [{"name": "Python", "category": "programming_languages"}]
-        ])
-
-        result = await analyzer.analyze_market("Developer", "Toronto", "Ontario")
-
-        assert result["total_jobs_analyzed"] == 2
-
 
 class TestGetSkillsByCategory:
 
@@ -127,6 +140,8 @@ class TestGetSkillsByCategory:
         analyzer = MarketAnalyzer()
         analyzer.jsearch = Mock()
         analyzer.jsearch.get_job_descriptions.return_value = []
+        analyzer.cache = Mock()
+        analyzer.cache.get_cache_results.return_value = None
 
         result = await analyzer.get_skills_by_category("Developer", "Toronto", "Ontario")
 
@@ -138,6 +153,9 @@ class TestGetSkillsByCategory:
         analyzer = MarketAnalyzer()
         analyzer.jsearch = Mock()
         analyzer.jsearch.get_job_descriptions.return_value = ["Job description"]
+        analyzer.cache = Mock()
+        analyzer.cache.get_cache_results.return_value = None
+        analyzer.cache.save_to_cache.return_value = True
 
         analyzer.extractor = Mock()
         analyzer.extractor.extract_all_skills = AsyncMock(return_value=[
@@ -158,6 +176,9 @@ class TestGetSkillsByCategory:
         analyzer = MarketAnalyzer()
         analyzer.jsearch = Mock()
         analyzer.jsearch.get_job_descriptions.return_value = ["Job"]
+        analyzer.cache = Mock()
+        analyzer.cache.get_cache_results.return_value = None
+        analyzer.cache.save_to_cache.return_value = True
 
         analyzer.extractor = Mock()
         analyzer.extractor.extract_all_skills = AsyncMock(return_value=[

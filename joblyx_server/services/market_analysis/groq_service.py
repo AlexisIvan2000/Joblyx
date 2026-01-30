@@ -13,7 +13,7 @@ class GroqSkillsExtractor:
 
     def _load_skills_reference(self) -> tuple[dict, list]:
         """Charge skills.json comme référence"""
-        skills_path = Path(__file__).parent.parent / "data" / "skills.json"
+        skills_path = Path(__file__).parent.parent.parent / "data" / "skills.json"
         with open(skills_path, "r", encoding="utf-8") as f:
             data = json.load(f)
 

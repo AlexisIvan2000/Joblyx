@@ -8,7 +8,7 @@ client = TestClient(app)
 
 class TestCacheStats:
 
-    @patch('services.cache_service.cache_service.get_stats')
+    @patch('routers.cache.cache_service.get_stats')
     def test_get_stats_success(self, mock_get_stats):
         mock_get_stats.return_value = {
             "total_entries": 100,
@@ -30,7 +30,7 @@ class TestCacheStats:
 
 class TestCacheCleanup:
 
-    @patch('services.cache_service.cache_service.clear_expired')
+    @patch('routers.cache.cache_service.clear_expired')
     def test_cleanup_success(self, mock_clear):
         mock_clear.return_value = 15
 
@@ -40,7 +40,7 @@ class TestCacheCleanup:
         data = response.json()
         assert data["deleted_entries"] == 15
 
-    @patch('services.cache_service.cache_service.clear_expired')
+    @patch('routers.cache.cache_service.clear_expired')
     def test_cleanup_no_expired(self, mock_clear):
         mock_clear.return_value = 0
 

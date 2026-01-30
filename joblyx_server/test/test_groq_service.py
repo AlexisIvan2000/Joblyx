@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import Mock, patch, MagicMock
-from  services.market_analysis import GroqSkillsExtractor, groq_extractor
+from services.market_analysis import GroqSkillsExtractor, groq_extractor
 
 
 class TestGroqSkillsExtractor:
@@ -45,7 +45,7 @@ class TestGetCategory:
 
 class TestExtractSkills:
 
-    @patch('services.groq_service.Groq')
+    @patch('services.market_analysis.groq_service.Groq')
     def test_extract_skills_success(self, mock_groq_class):
         mock_client = MagicMock()
         mock_response = MagicMock()
@@ -59,7 +59,7 @@ class TestExtractSkills:
         assert "Python" in skills
         assert "React" in skills
 
-    @patch('services.groq_service.Groq')
+    @patch('services.market_analysis.groq_service.Groq')
     def test_extract_skills_with_markdown(self, mock_groq_class):
         mock_client = MagicMock()
         mock_response = MagicMock()
@@ -73,7 +73,7 @@ class TestExtractSkills:
         assert "Python" in skills
         assert "JavaScript" in skills
 
-    @patch('services.groq_service.Groq')
+    @patch('services.market_analysis.groq_service.Groq')
     def test_extract_skills_filters_invalid(self, mock_groq_class):
         mock_client = MagicMock()
         mock_response = MagicMock()
@@ -88,7 +88,7 @@ class TestExtractSkills:
         assert "React" in skills
         assert "FakeSkill123" not in skills
 
-    @patch('services.groq_service.Groq')
+    @patch('services.market_analysis.groq_service.Groq')
     def test_extract_skills_error_returns_empty(self, mock_groq_class):
         mock_client = MagicMock()
         mock_client.chat.completions.create.side_effect = Exception("API Error")

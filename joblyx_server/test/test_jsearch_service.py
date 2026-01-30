@@ -1,6 +1,7 @@
 import pytest
 from unittest.mock import patch, Mock
-from services.jsearch_service import JSearchService, jsearch_service, normalize_text
+from services.market_analysis import JSearchService, jsearch_service
+from services.market_analysis.jsearch_service import normalize_text
 
 
 class TestNormalizeText:
@@ -44,7 +45,7 @@ class TestJSearchService:
 
 class TestSearchJobs:
 
-    @patch('services.jsearch_service.requests.get')
+    @patch('services.market_analysis.jsearch_service.requests.get')
     def test_search_jobs_success(self, mock_get, mock_jsearch_response):
         mock_response = Mock()
         mock_response.json.return_value = mock_jsearch_response
@@ -57,7 +58,7 @@ class TestSearchJobs:
         assert len(jobs) == 2
         assert mock_get.called
 
-    @patch('services.jsearch_service.requests.get')
+    @patch('services.market_analysis.jsearch_service.requests.get')
     def test_search_jobs_empty_response(self, mock_get):
         mock_response = Mock()
         mock_response.json.return_value = {"data": []}
@@ -69,7 +70,7 @@ class TestSearchJobs:
 
         assert jobs == []
 
-    @patch('services.jsearch_service.requests.get')
+    @patch('services.market_analysis.jsearch_service.requests.get')
     def test_search_jobs_api_error(self, mock_get):
         import requests
         mock_get.side_effect = requests.exceptions.RequestException("API Error")
@@ -79,7 +80,7 @@ class TestSearchJobs:
 
         assert jobs == []
 
-    @patch('services.jsearch_service.requests.get')
+    @patch('services.market_analysis.jsearch_service.requests.get')
     def test_normalizes_query(self, mock_get):
         mock_response = Mock()
         mock_response.json.return_value = {"data": []}
@@ -96,7 +97,7 @@ class TestSearchJobs:
         assert "Developpeur" in params["query"]
         assert "Montreal" in params["query"]
 
-    @patch('services.jsearch_service.requests.get')
+    @patch('services.market_analysis.jsearch_service.requests.get')
     def test_search_jobs_params(self, mock_get):
         mock_response = Mock()
         mock_response.json.return_value = {"data": []}
