@@ -1,7 +1,7 @@
 import asyncio
 from collections import Counter, defaultdict
-from services.jsearch_service import jsearch_service
-from services.groq_service import groq_extractor
+from market_analysis import jsearch_service
+from market_analysis import groq_extractor
 from services.cache_service  import cache_service
 
 

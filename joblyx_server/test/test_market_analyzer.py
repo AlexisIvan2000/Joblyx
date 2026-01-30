@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import Mock, patch, AsyncMock
 from collections import Counter
-from services.market_analyzer import MarketAnalyzer, market_analyzer
+from services.market_analysis import MarketAnalyzer, market_analyzer
 
 
 class TestMarketAnalyzer:

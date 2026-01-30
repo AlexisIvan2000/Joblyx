@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import Mock, patch, MagicMock
-from services.groq_service import GroqSkillsExtractor, groq_extractor
+from  services.market_analysis import GroqSkillsExtractor, groq_extractor
 
 
 class TestGroqSkillsExtractor:
