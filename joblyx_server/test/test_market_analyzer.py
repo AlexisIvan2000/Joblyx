@@ -1,5 +1,5 @@
 import pytest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, AsyncMock
 from collections import Counter
 from services.market_analyzer import MarketAnalyzer, market_analyzer
 
@@ -33,35 +33,33 @@ class TestCategoryConfiguration:
 
 class TestAnalyzeMarket:
 
-    @patch('services.market_analyzer.jsearch_service')
-    def test_no_jobs_found(self, mock_jsearch):
-        mock_jsearch.get_job_descriptions.return_value = []
-
+    @pytest.mark.asyncio
+    async def test_no_jobs_found(self):
         analyzer = MarketAnalyzer()
-        analyzer.jsearch = mock_jsearch
+        analyzer.jsearch = Mock()
+        analyzer.jsearch.get_job_descriptions.return_value = []
 
-        result = analyzer.analyze_market("Developer", "Toronto", "Ontario")
+        result = await analyzer.analyze_market("Developer", "Toronto", "Ontario")
 
         assert result["total_jobs_analyzed"] == 0
         assert result["top_skills"] == []
         assert "message" in result
 
-    @patch('services.market_analyzer.groq_extractor')
-    @patch('services.market_analyzer.jsearch_service')
-    def test_analyze_returns_structure(self, mock_jsearch, mock_extractor):
-        mock_jsearch.get_job_descriptions.return_value = [
-            "Python and React developer needed."
-        ]
-        mock_extractor.extract_skills_list.return_value = [
-            {"name": "Python", "category": "programming_languages"},
-            {"name": "React", "category": "frontend_frameworks"}
-        ]
-
+    @pytest.mark.asyncio
+    async def test_analyze_returns_structure(self):
         analyzer = MarketAnalyzer()
-        analyzer.jsearch = mock_jsearch
-        analyzer.extractor = mock_extractor
+        analyzer.jsearch = Mock()
+        analyzer.jsearch.get_job_descriptions.return_value = ["Python and React developer needed."]
 
-        result = analyzer.analyze_market("Developer", "Toronto", "Ontario")
+        analyzer.extractor = Mock()
+        analyzer.extractor.extract_all_skills = AsyncMock(return_value=[
+            [
+                {"name": "Python", "category": "programming_languages"},
+                {"name": "React", "category": "frontend_frameworks"}
+            ]
+        ])
+
+        result = await analyzer.analyze_market("Developer", "Toronto", "Ontario")
 
         assert "query" in result
         assert "location" in result
@@ -69,115 +67,107 @@ class TestAnalyzeMarket:
         assert "top_skills" in result
         assert result["location"] == "Toronto, Ontario, Canada"
 
-    @patch('services.market_analyzer.groq_extractor')
-    @patch('services.market_analyzer.jsearch_service')
-    def test_skill_counting(self, mock_jsearch, mock_extractor):
-        mock_jsearch.get_job_descriptions.return_value = [
-            "Job 1", "Job 2", "Job 3"
-        ]
-        mock_extractor.extract_skills_list.side_effect = [
+    @pytest.mark.asyncio
+    async def test_skill_counting(self):
+        analyzer = MarketAnalyzer()
+        analyzer.jsearch = Mock()
+        analyzer.jsearch.get_job_descriptions.return_value = ["Job 1", "Job 2", "Job 3"]
+
+        analyzer.extractor = Mock()
+        analyzer.extractor.extract_all_skills = AsyncMock(return_value=[
             [{"name": "Python", "category": "programming_languages"}],
             [{"name": "Python", "category": "programming_languages"},
              {"name": "Java", "category": "programming_languages"}],
             [{"name": "Python", "category": "programming_languages"}]
-        ]
+        ])
 
-        analyzer = MarketAnalyzer()
-        analyzer.jsearch = mock_jsearch
-        analyzer.extractor = mock_extractor
-
-        result = analyzer.analyze_market("Developer", "Toronto", "Ontario", balanced=False)
+        result = await analyzer.analyze_market("Developer", "Toronto", "Ontario", balanced=False)
 
         python_skill = next((s for s in result["top_skills"] if s["name"] == "Python"), None)
         assert python_skill is not None
         assert python_skill["count"] == 3
         assert python_skill["percentage"] == 100.0
 
-    @patch('services.market_analyzer.groq_extractor')
-    @patch('services.market_analyzer.jsearch_service')
-    def test_balanced_limits_per_category(self, mock_jsearch, mock_extractor):
-        mock_jsearch.get_job_descriptions.return_value = ["Job"] * 5
-
-        # 10 langages, tous à 100%
-        mock_extractor.extract_skills_list.return_value = [
-            {"name": f"Lang{i}", "category": "programming_languages"}
-            for i in range(10)
-        ]
-
+    @pytest.mark.asyncio
+    async def test_balanced_limits_per_category(self):
         analyzer = MarketAnalyzer()
-        analyzer.jsearch = mock_jsearch
-        analyzer.extractor = mock_extractor
+        analyzer.jsearch = Mock()
+        analyzer.jsearch.get_job_descriptions.return_value = ["Job"] * 5
 
-        result = analyzer.analyze_market("Developer", "Toronto", "Ontario", balanced=True)
+        analyzer.extractor = Mock()
+        analyzer.extractor.extract_all_skills = AsyncMock(return_value=[
+            [{"name": f"Lang{i}", "category": "programming_languages"} for i in range(10)]
+        ] * 5)
+
+        result = await analyzer.analyze_market("Developer", "Toronto", "Ontario", balanced=True)
 
         lang_skills = [s for s in result["top_skills"] if s["category"] == "programming_languages"]
         assert len(lang_skills) <= MarketAnalyzer.MAX_PER_CATEGORY
 
-    @patch('services.market_analyzer.groq_extractor')
-    @patch('services.market_analyzer.jsearch_service')
-    def test_handles_extraction_error(self, mock_jsearch, mock_extractor):
-        mock_jsearch.get_job_descriptions.return_value = ["Job 1", "Job 2"]
-        mock_extractor.extract_skills_list.side_effect = [
-            Exception("API Error"),
-            [{"name": "Python", "category": "programming_languages"}]
-        ]
-
+    @pytest.mark.asyncio
+    async def test_handles_extraction_error(self):
         analyzer = MarketAnalyzer()
-        analyzer.jsearch = mock_jsearch
-        analyzer.extractor = mock_extractor
+        analyzer.jsearch = Mock()
+        analyzer.jsearch.get_job_descriptions.return_value = ["Job 1", "Job 2"]
 
-        result = analyzer.analyze_market("Developer", "Toronto", "Ontario")
+        analyzer.extractor = Mock()
+        analyzer.extractor.extract_all_skills = AsyncMock(return_value=[
+            [{"name": "Python", "category": "programming_languages"}]
+        ])
+
+        result = await analyzer.analyze_market("Developer", "Toronto", "Ontario")
 
         assert result["total_jobs_analyzed"] == 2
 
 
 class TestGetSkillsByCategory:
 
-    @patch('services.market_analyzer.jsearch_service')
-    def test_no_jobs_found(self, mock_jsearch):
-        mock_jsearch.get_job_descriptions.return_value = []
-
+    @pytest.mark.asyncio
+    async def test_no_jobs_found(self):
         analyzer = MarketAnalyzer()
-        analyzer.jsearch = mock_jsearch
+        analyzer.jsearch = Mock()
+        analyzer.jsearch.get_job_descriptions.return_value = []
 
-        result = analyzer.get_skills_by_category("Developer", "Toronto", "Ontario")
+        result = await analyzer.get_skills_by_category("Developer", "Toronto", "Ontario")
 
         assert result["total_jobs_analyzed"] == 0
         assert result["skills_by_category"] == {}
 
-    @patch('services.market_analyzer.groq_extractor')
-    @patch('services.market_analyzer.jsearch_service')
-    def test_groups_by_category(self, mock_jsearch, mock_extractor):
-        mock_jsearch.get_job_descriptions.return_value = ["Job description"]
-        mock_extractor.extract_skills_list.return_value = [
-            {"name": "Python", "category": "programming_languages"},
-            {"name": "JavaScript", "category": "programming_languages"},
-            {"name": "React", "category": "frontend_frameworks"},
-            {"name": "PostgreSQL", "category": "databases"}
-        ]
-
+    @pytest.mark.asyncio
+    async def test_groups_by_category(self):
         analyzer = MarketAnalyzer()
-        analyzer.jsearch = mock_jsearch
-        analyzer.extractor = mock_extractor
+        analyzer.jsearch = Mock()
+        analyzer.jsearch.get_job_descriptions.return_value = ["Job description"]
 
-        result = analyzer.get_skills_by_category("Developer", "Toronto", "Ontario")
+        analyzer.extractor = Mock()
+        analyzer.extractor.extract_all_skills = AsyncMock(return_value=[
+            [
+                {"name": "Python", "category": "programming_languages"},
+                {"name": "JavaScript", "category": "programming_languages"},
+                {"name": "React", "category": "frontend_frameworks"},
+                {"name": "PostgreSQL", "category": "databases"}
+            ]
+        ])
+
+        result = await analyzer.get_skills_by_category("Developer", "Toronto", "Ontario")
 
         assert "skills_by_category" in result
 
-    @patch('services.market_analyzer.groq_extractor')
-    @patch('services.market_analyzer.jsearch_service')
-    def test_respects_category_order(self, mock_jsearch, mock_extractor):
-        mock_jsearch.get_job_descriptions.return_value = ["Job"]
-        mock_extractor.extract_skills_list.return_value = [
-            {"name": "PostgreSQL", "category": "databases"},
-            {"name": "Python", "category": "programming_languages"},
-        ]
-
+    @pytest.mark.asyncio
+    async def test_respects_category_order(self):
         analyzer = MarketAnalyzer()
-        analyzer.jsearch = mock_jsearch
-        analyzer.extractor = mock_extractor
+        analyzer.jsearch = Mock()
+        analyzer.jsearch.get_job_descriptions.return_value = ["Job"]
 
-        result = analyzer.get_skills_by_category("Developer", "Toronto", "Ontario")
+        analyzer.extractor = Mock()
+        analyzer.extractor.extract_all_skills = AsyncMock(return_value=[
+            [
+                {"name": "PostgreSQL", "category": "databases"},
+                {"name": "Python", "category": "programming_languages"},
+            ]
+        ])
+
+        result = await analyzer.get_skills_by_category("Developer", "Toronto", "Ontario")
 
         categories = list(result["skills_by_category"].keys())
         if len(categories) > 1:

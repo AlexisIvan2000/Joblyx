@@ -1,5 +1,6 @@
 import json
-from groq import Groq
+import asyncio
+from groq import Groq, AsyncGroq
 from pathlib import Path
 from config import GROQ_API_KEY
 
@@ -7,6 +8,7 @@ from config import GROQ_API_KEY
 class GroqSkillsExtractor:
     def __init__(self):
         self.client = Groq(api_key=GROQ_API_KEY)
+        self.async_client = AsyncGroq(api_key=GROQ_API_KEY)
         self.skills_by_category, self.skills_list = self._load_skills_reference()
 
     def _load_skills_reference(self) -> tuple[dict, list]:
@@ -85,6 +87,63 @@ RETURN FORMAT (JSON array only):
             {"name": skill, "category": self._get_category(skill)}
             for skill in skills
         ]
+
+    async def extract_skills_async(self, job_description: str) -> list[str]:
+        """Version async de extract_skills"""
+
+        prompt = f"""Extract technical skills from this job posting.
+
+            RULES:
+            1. ONLY return skills from this list: {", ".join(self.skills_list)}
+            2. Return ONLY a JSON array, nothing else
+            3. Ignore skills not in the list
+
+            JOB POSTING:
+            {job_description[:3000]}
+
+            RETURN FORMAT (JSON array only):
+            
+            ["Python", "React", "AWS"]"""
+
+        try:
+            response = await self.async_client.chat.completions.create(
+                model="llama-3.1-8b-instant",
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0,
+                max_tokens=500
+            )
+
+            content = response.choices[0].message.content.strip()
+
+            if content.startswith("```json"):
+                content = content[7:]
+            if content.startswith("```"):
+                content = content[3:]
+            if content.endswith("```"):
+                content = content[:-3]
+
+            skills = json.loads(content.strip())
+            return [s for s in skills if s in self.skills_list]
+
+        except Exception as e:
+            print(f"Erreur Groq async: {e}")
+            return []
+
+    async def extract_skills_list_async(self, job_description: str) -> list[dict]:
+        """Version async de extract_skills_list"""
+        skills = await self.extract_skills_async(job_description)
+        return [
+            {"name": skill, "category": self._get_category(skill)}
+            for skill in skills
+        ]
+
+    async def extract_all_skills(self, descriptions: list[str]) -> list[list[dict]]:
+        """Extrait les skills de plusieurs descriptions en parallèle"""
+        tasks = [self.extract_skills_list_async(desc) for desc in descriptions]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+
+        # Filtrer les erreurs
+        return [r for r in results if isinstance(r, list)]
 
 
 groq_extractor = GroqSkillsExtractor()

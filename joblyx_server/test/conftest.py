@@ -1,5 +1,7 @@
 import pytest
 
+pytest_plugins = ('pytest_asyncio',)
+
 
 @pytest.fixture
 def sample_job_description_en():

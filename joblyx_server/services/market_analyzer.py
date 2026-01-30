@@ -1,3 +1,4 @@
+import asyncio
 from collections import Counter, defaultdict
 from services.jsearch_service import jsearch_service
 from services.groq_service import groq_extractor
@@ -13,25 +14,57 @@ class MarketAnalyzer:
         "cloud_platforms",
         "devops_tools",
         "ai_ml",
-        "methodologies",
+        "api_technologies",
         "testing",
         "version_control",
+        "mobile_development",
+        "methodologies",
+        "security",
+        "monitoring_observability",
+        "operating_systems",
+        "networking",
+        "message_queues_streaming",
+        "build_tools",
+        "ide_editors",
+        "project_management",
+        "collaboration_tools",
+        "certifications",
+        "soft_skills",
+        "cms_ecommerce",
+        "game_development",
+        "embedded_iot",
+        "blockchain_web3",
+        "low_code_no_code",
     ]
 
-    MIN_PERCENTAGE = 20
-    .0
+    MIN_PERCENTAGE = 20.0
     MAX_PER_CATEGORY = 5
 
     def __init__(self):
         self.jsearch = jsearch_service
         self.extractor = groq_extractor
 
-    def analyze_market(
+    def _process_skills_results(self, results: list[list[dict]]) -> tuple[list, dict]:
+        """Traite les résultats d'extraction pour obtenir skills et catégories"""
+        all_skills = []
+        skill_categories = {}
+
+        for skills_list in results:
+            for skill_info in skills_list:
+                skill_name = skill_info["name"]
+                category = skill_info["category"]
+                all_skills.append(skill_name)
+                if skill_name not in skill_categories:
+                    skill_categories[skill_name] = category
+
+        return all_skills, skill_categories
+
+    async def analyze_market(
         self,
         query: str,
         city: str,
         province: str,
-        top_n: int = 25,
+        top_n: int = 30,
         balanced: bool = True,
         num_pages: int = 3,
     ) -> dict:
@@ -56,22 +89,9 @@ class MarketAnalyzer:
                 "message": "No jobs found for this search"
             }
 
-        # Extraire les skills avec gestion d'erreur par description
-        all_skills = []
-        skill_categories = {}
-
-        for description in descriptions:
-            try:
-                skills = self.extractor.extract_skills_list(description)
-                for skill_info in skills:
-                    skill_name = skill_info["name"]
-                    category = skill_info["category"]
-                    all_skills.append(skill_name)
-                    if skill_name not in skill_categories:
-                        skill_categories[skill_name] = category
-            except Exception as e:
-                print(f"Erreur extraction skills: {e}")
-                continue
+        # Extraire les skills en parallèle avec Groq
+        results = await self.extractor.extract_all_skills(descriptions)
+        all_skills, skill_categories = self._process_skills_results(results)
 
         # Compter et trier
         skill_counts = Counter(all_skills)
@@ -84,11 +104,9 @@ class MarketAnalyzer:
             category = skill_categories.get(skill_name, "other")
             percentage = round((count / total_jobs) * 100, 1)
 
-            # Filtre minimum
             if percentage < self.MIN_PERCENTAGE:
                 continue
 
-            # Si balanced, limiter par catégorie
             if balanced and category_counts[category] >= self.MAX_PER_CATEGORY:
                 continue
 
@@ -109,8 +127,9 @@ class MarketAnalyzer:
             "location": location,
             "total_jobs_analyzed": total_jobs,
             "top_skills": top_skills
-        }  
-    def get_skills_by_category(
+        }
+
+    async def get_skills_by_category(
         self,
         query: str,
         city: str,
@@ -118,7 +137,7 @@ class MarketAnalyzer:
         num_pages: int = 3,
     ) -> dict:
         """Analyse le marché avec Groq pour l'extraction"""
-        
+
         location = f"{city}, {province}, Canada"
 
         descriptions = self.jsearch.get_job_descriptions(
@@ -138,22 +157,9 @@ class MarketAnalyzer:
                 "message": "No jobs found for this search"
             }
 
-        # Extraire les skills avec Groq (gestion d'erreur par description)
-        all_skills = []
-        skill_categories = {}
-
-        for description in descriptions:
-            try:
-                skills = self.extractor.extract_skills_list(description)
-                for skill_info in skills:
-                    skill_name = skill_info["name"]
-                    category = skill_info["category"]
-                    all_skills.append(skill_name)
-                    if skill_name not in skill_categories:
-                        skill_categories[skill_name] = category
-            except Exception as e:
-                print(f"Erreur extraction skills: {e}")
-                continue
+        # Extraire les skills en parallèle avec Groq
+        results = await self.extractor.extract_all_skills(descriptions)
+        all_skills, skill_categories = self._process_skills_results(results)
 
         # Compter les skills
         skill_counts = Counter(all_skills)

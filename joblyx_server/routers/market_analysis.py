@@ -13,7 +13,7 @@ async def analyze_market(
     job: str = Query(..., description="Job title (e.g., 'Software Developer')"),
     city: str = Query(..., description="City name (e.g., 'Toronto')"),
     province: str = Query(..., description="Province name (e.g., 'Ontario')"),
-    top_n: int = Query(25, ge=10, le=50, description="Number of top skills to return (10-50)"),
+    top_n: int = Query(30, ge=10, le=50, description="Number of top skills to return (10-50)"),
     balanced: bool = Query(True, description="Balance skills across categories")
 ):
     """
@@ -23,7 +23,7 @@ async def analyze_market(
     When balanced=True, ensures diversity across skill categories.
     """
     try:
-        result = market_analyzer.analyze_market(
+        result = await market_analyzer.analyze_market(
             query=job,
             city=city,
             province=province,
@@ -45,7 +45,7 @@ async def analyze_market_by_category(
     Analyze the job market and return skills grouped by category.
     """
     try:
-        result = market_analyzer.get_skills_by_category(
+        result = await market_analyzer.get_skills_by_category(
             query=job,
             city=city,
             province=province
