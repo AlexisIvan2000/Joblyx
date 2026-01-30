@@ -1,31 +1,11 @@
 from fastapi import APIRouter, Query, HTTPException
-from pydantic import BaseModel
+from data.models import MarketAnalysisResponse, SkillsByCategoryResponse
 from services.market_analyzer import market_analyzer
 
 
 router = APIRouter(prefix="/market", tags=["Market Analysis"])
 
 
-class SkillInfo(BaseModel):
-    name: str
-    count: int
-    percentage: float
-    category: str
-
-
-class MarketAnalysisResponse(BaseModel):
-    query: str
-    location: str
-    total_jobs_analyzed: int
-    top_skills: list[SkillInfo]
-    message: str | None = None
-
-
-class SkillsByCategoryResponse(BaseModel):
-    query: str
-    location: str
-    total_jobs_analyzed: int
-    skills_by_category: dict[str, list[dict]]
 
 
 @router.get("/analyze", response_model=MarketAnalysisResponse)
