@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import market_analysis, cache
+from routers import market_analysis, cache, history
 
 app = FastAPI(
     title="Joblyx API",
@@ -18,6 +18,7 @@ app.add_middleware(
 
 app.include_router(market_analysis.router)
 app.include_router(cache.router)
+app.include_router(history.router)
 
 
 @app.get("/")

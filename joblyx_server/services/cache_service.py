@@ -7,21 +7,27 @@ class CacheService:
 
         try:
             result = supabase.table("search_cache") \
-                .select("results") \
+                .select("id, results") \
                 .ilike("query", query) \
                 .ilike("city", city) \
                 .ilike("province", province) \
                 .gte("expires_at", datetime.now().isoformat()) \
                 .maybe_single() \
                 .execute()
-            
+
             if result.data:
+                # Déclencher le trigger pour incrémenter hit_count et refresh TTL
+                supabase.table("search_cache") \
+                    .update({"total_jobs": result.data["results"].get("total_jobs_analyzed", 0)}) \
+                    .eq("id", result.data["id"]) \
+                    .execute()
+
                 print(f"Cache hit: {query} - {city} ({province})")
                 return result.data["results"]
-            
+
             print(f"Cache miss: {query} - {city} ({province})")
             return None
-        
+
         except Exception as e:
             print(f"Error lecture cache: {e}")
             return None
@@ -38,11 +44,11 @@ class CacheService:
                     "results": results,
                     "total_jobs": total_jobs,
                 },
-                 on_conflict="query,city,province"
+                on_conflict="idx_unique_search_case_insensitive"
             ).execute()
-            print(f"Cache saved: {query}- {city} ({province})")
+            print(f"Cache saved: {query} - {city} ({province})")
             return True
-        
+
         except Exception as e:
             print(f"Error saving to cache: {e}")
             return False
