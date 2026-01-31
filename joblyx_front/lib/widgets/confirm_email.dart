@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:joblyx_front/providers/auth_service_provider.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
-import 'package:joblyx_front/services/auth_exception.dart';
+import 'package:joblyx_front/services/auth/auth_exception.dart';
 import 'package:joblyx_front/widgets/app_snackbar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

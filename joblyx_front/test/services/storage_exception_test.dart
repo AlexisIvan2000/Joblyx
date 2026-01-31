@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:joblyx_front/services/storage_exception.dart';
+import 'package:joblyx_front/services/storage/storage_exception.dart';
 
 void main() {
   group('StorageFailure', () {

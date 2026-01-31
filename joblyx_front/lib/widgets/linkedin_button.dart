@@ -8,7 +8,7 @@ import 'package:joblyx_front/providers/auth_service_provider.dart';
 import 'package:joblyx_front/providers/supabase_provider.dart';
 import 'package:joblyx_front/routers/routes.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
-import 'package:joblyx_front/services/auth_exception.dart';
+import 'package:joblyx_front/services/auth/auth_exception.dart';
 import 'package:joblyx_front/widgets/app_snackbar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

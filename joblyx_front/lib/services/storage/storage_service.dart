@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:joblyx_front/services/storage_exception.dart';
+import 'package:joblyx_front/services/storage/storage_exception.dart';
 
 class StorageService {
   final SupabaseClient _supabase;

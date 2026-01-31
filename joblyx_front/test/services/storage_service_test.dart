@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:joblyx_front/services/storage_service.dart';
+import 'package:joblyx_front/services/storage/storage_service.dart';
 
 void main() {
   group('StorageService', () {

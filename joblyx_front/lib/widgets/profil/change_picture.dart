@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:joblyx_front/providers/auth_service_provider.dart';
 import 'package:joblyx_front/providers/storage_service_provider.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
-import 'package:joblyx_front/services/storage_exception.dart';
+import 'package:joblyx_front/services/storage/storage_exception.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void showChangePictureDialog(BuildContext context, WidgetRef ref) {

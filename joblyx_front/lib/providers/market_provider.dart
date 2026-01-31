@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:joblyx_front/models/market_analysis_model.dart';
-import 'package:joblyx_front/services/market_service.dart';
+import 'package:joblyx_front/services/market/market_service.dart';
 
 final marketServiceProvider = Provider<MarketService>((ref) {
   return MarketService();

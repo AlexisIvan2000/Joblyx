@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:joblyx_front/services/auth_exception.dart';
+import 'package:joblyx_front/services/auth/auth_exception.dart';
 
 void main() {
   group('AuthFailure', () {

@@ -5,7 +5,7 @@ import 'package:joblyx_front/providers/auth_service_provider.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:joblyx_front/services/auth_exception.dart';
+import 'package:joblyx_front/services/auth/auth_exception.dart';
 import 'package:joblyx_front/widgets/confirm_email.dart';
 import 'package:joblyx_front/widgets/linkedin_button.dart';
 import 'app_snackbar.dart';
