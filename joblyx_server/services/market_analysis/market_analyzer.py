@@ -1,6 +1,6 @@
 import asyncio
 from collections import Counter, defaultdict
-from .jsearch_service import jsearch_service
+from .job_search_service import job_search_service
 from .groq_service import groq_extractor
 from services.cache_service import cache_service
 
@@ -42,7 +42,7 @@ class MarketAnalyzer:
     MAX_PER_CATEGORY = 5
 
     def __init__(self):
-        self.jsearch = jsearch_service
+        self.job_search = job_search_service
         self.extractor = groq_extractor
         self.cache = cache_service
     
@@ -81,8 +81,8 @@ class MarketAnalyzer:
             cached["from_cache"] = True
             return cached
         
-        # Récupérer les descriptions des offres (JSearch)
-        descriptions = self.jsearch.get_job_descriptions(
+        # Récupérer les descriptions des offres (JSearch ou SerpAPI fallback)
+        descriptions = await self.job_search.get_job_descriptions(
             query=query,
             location=location,
             num_pages=num_pages
@@ -163,7 +163,7 @@ class MarketAnalyzer:
             cached["from_cache"] = True
             return cached
 
-        descriptions = self.jsearch.get_job_descriptions(
+        descriptions = await self.job_search.get_job_descriptions(
             query=query,
             location=location,
             num_pages=num_pages

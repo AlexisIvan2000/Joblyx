@@ -1,6 +1,6 @@
 import unicodedata
 import httpx
-from config import RAPIDAPI_KEY
+from config import SERPAPI_KEY
 
 
 def normalize_text(text: str) -> str:
@@ -9,14 +9,11 @@ def normalize_text(text: str) -> str:
     return without_accents
 
 
-class JSearchService:
-    BASE_URL = "https://jsearch.p.rapidapi.com/search"
+class SerpAPIService:
+    BASE_URL = "https://serpapi.com/search"
 
     def __init__(self):
-        self.headers = {
-            "X-RapidAPI-Key": RAPIDAPI_KEY,
-            "X-RapidAPI-Host": "jsearch.p.rapidapi.com"
-        }
+        self.api_key = SERPAPI_KEY
 
     async def search_jobs(self, query: str, location: str = "", num_pages: int = 1) -> list[dict]:
         all_jobs = []
@@ -25,35 +22,40 @@ class JSearchService:
         location = normalize_text(location)
 
         async with httpx.AsyncClient(timeout=30) as client:
-            for page in range(1, num_pages + 1):
+            for page in range(num_pages):
                 params = {
-                    "query": f"{query} in {location}" if location else query,
-                    "page": str(page),
-                    "num_pages": "3",
-                    "country": "ca",
-                    "date_posted": "month"
+                    "engine": "google_jobs",
+                    "q": f"{query} {location}" if location else query,
+                    "hl": "en",
+                    "gl": "ca",
+                    "start": page * 10,
+                    "api_key": self.api_key
                 }
 
                 try:
-                    response = await client.get(
-                        self.BASE_URL,
-                        headers=self.headers,
-                        params=params
-                    )
+                    response = await client.get(self.BASE_URL, params=params)
                     response.raise_for_status()
                     data = response.json()
 
-                    jobs = data.get("data", [])
+                    jobs = data.get("jobs_results", [])
                     if not jobs:
                         break
 
-                    all_jobs.extend(jobs)
+                    # Normaliser le format pour correspondre à JSearch
+                    for job in jobs:
+                        all_jobs.append({
+                            "job_title": job.get("title", ""),
+                            "job_description": job.get("description", ""),
+                            "employer_name": job.get("company_name", ""),
+                            "job_city": job.get("location", ""),
+                            "job_country": "CA"
+                        })
 
                 except httpx.HTTPStatusError as e:
-                    print(f"JSearch HTTP error page {page}: {e}")
+                    print(f"SerpAPI HTTP error page {page}: {e}")
                     raise
                 except httpx.RequestError as e:
-                    print(f"JSearch request error page {page}: {e}")
+                    print(f"SerpAPI request error page {page}: {e}")
                     break
 
         return all_jobs
@@ -70,4 +72,4 @@ class JSearchService:
         return descriptions
 
 
-jsearch_service = JSearchService()
+serpapi_service = SerpAPIService()

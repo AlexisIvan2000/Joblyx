@@ -10,8 +10,8 @@ class TestMarketAnalyzer:
         assert market_analyzer is not None
         assert isinstance(market_analyzer, MarketAnalyzer)
 
-    def test_has_jsearch_service(self):
-        assert market_analyzer.jsearch is not None
+    def test_has_job_search_service(self):
+        assert market_analyzer.job_search is not None
 
     def test_has_extractor(self):
         assert market_analyzer.extractor is not None
@@ -36,8 +36,8 @@ class TestAnalyzeMarket:
     @pytest.mark.asyncio
     async def test_no_jobs_found(self):
         analyzer = MarketAnalyzer()
-        analyzer.jsearch = Mock()
-        analyzer.jsearch.get_job_descriptions.return_value = []
+        analyzer.job_search = Mock()
+        analyzer.job_search.get_job_descriptions = AsyncMock(return_value=[])
         analyzer.cache = Mock()
         analyzer.cache.get_cache_results.return_value = None
 
@@ -50,8 +50,10 @@ class TestAnalyzeMarket:
     @pytest.mark.asyncio
     async def test_analyze_returns_structure(self):
         analyzer = MarketAnalyzer()
-        analyzer.jsearch = Mock()
-        analyzer.jsearch.get_job_descriptions.return_value = ["Python and React developer needed."]
+        analyzer.job_search = Mock()
+        analyzer.job_search.get_job_descriptions = AsyncMock(
+            return_value=["Python and React developer needed."]
+        )
         analyzer.cache = Mock()
         analyzer.cache.get_cache_results.return_value = None
         analyzer.cache.save_to_cache.return_value = True
@@ -75,8 +77,10 @@ class TestAnalyzeMarket:
     @pytest.mark.asyncio
     async def test_skill_counting(self):
         analyzer = MarketAnalyzer()
-        analyzer.jsearch = Mock()
-        analyzer.jsearch.get_job_descriptions.return_value = ["Job 1", "Job 2", "Job 3"]
+        analyzer.job_search = Mock()
+        analyzer.job_search.get_job_descriptions = AsyncMock(
+            return_value=["Job 1", "Job 2", "Job 3"]
+        )
         analyzer.cache = Mock()
         analyzer.cache.get_cache_results.return_value = None
         analyzer.cache.save_to_cache.return_value = True
@@ -110,14 +114,16 @@ class TestAnalyzeMarket:
 
         result = await analyzer.analyze_market("Developer", "Toronto", "Ontario")
 
-        assert result == cached_result
+        # Le résultat du cache a from_cache=True ajouté
+        assert result["query"] == cached_result["query"]
+        assert result["from_cache"] is True
         analyzer.cache.get_cache_results.assert_called_once()
 
     @pytest.mark.asyncio
     async def test_balanced_limits_per_category(self):
         analyzer = MarketAnalyzer()
-        analyzer.jsearch = Mock()
-        analyzer.jsearch.get_job_descriptions.return_value = ["Job"] * 5
+        analyzer.job_search = Mock()
+        analyzer.job_search.get_job_descriptions = AsyncMock(return_value=["Job"] * 5)
         analyzer.cache = Mock()
         analyzer.cache.get_cache_results.return_value = None
         analyzer.cache.save_to_cache.return_value = True
@@ -138,8 +144,8 @@ class TestGetSkillsByCategory:
     @pytest.mark.asyncio
     async def test_no_jobs_found(self):
         analyzer = MarketAnalyzer()
-        analyzer.jsearch = Mock()
-        analyzer.jsearch.get_job_descriptions.return_value = []
+        analyzer.job_search = Mock()
+        analyzer.job_search.get_job_descriptions = AsyncMock(return_value=[])
         analyzer.cache = Mock()
         analyzer.cache.get_cache_results.return_value = None
 
@@ -151,8 +157,8 @@ class TestGetSkillsByCategory:
     @pytest.mark.asyncio
     async def test_groups_by_category(self):
         analyzer = MarketAnalyzer()
-        analyzer.jsearch = Mock()
-        analyzer.jsearch.get_job_descriptions.return_value = ["Job description"]
+        analyzer.job_search = Mock()
+        analyzer.job_search.get_job_descriptions = AsyncMock(return_value=["Job description"])
         analyzer.cache = Mock()
         analyzer.cache.get_cache_results.return_value = None
         analyzer.cache.save_to_cache.return_value = True
@@ -174,8 +180,8 @@ class TestGetSkillsByCategory:
     @pytest.mark.asyncio
     async def test_respects_category_order(self):
         analyzer = MarketAnalyzer()
-        analyzer.jsearch = Mock()
-        analyzer.jsearch.get_job_descriptions.return_value = ["Job"]
+        analyzer.job_search = Mock()
+        analyzer.job_search.get_job_descriptions = AsyncMock(return_value=["Job"])
         analyzer.cache = Mock()
         analyzer.cache.get_cache_results.return_value = None
         analyzer.cache.save_to_cache.return_value = True
