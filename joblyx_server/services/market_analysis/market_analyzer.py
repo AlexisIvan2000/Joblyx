@@ -78,6 +78,7 @@ class MarketAnalyzer:
         # Verifier le cache
         cached = self.cache.get_cache_results(query, city, province)
         if cached:
+            cached["from_cache"] = True
             return cached
         
         # Récupérer les descriptions des offres (JSearch)
@@ -95,7 +96,8 @@ class MarketAnalyzer:
                 "location": location,
                 "total_jobs_analyzed": 0,
                 "top_skills": [],
-                "message": "No jobs found for this search"
+                "message": "No jobs found for this search",
+                "from_cache": False
             }
 
         # Extraire les skills en parallèle avec Groq
@@ -135,7 +137,8 @@ class MarketAnalyzer:
             "query": query,
             "location": location,
             "total_jobs_analyzed": total_jobs,
-            "top_skills": top_skills
+            "top_skills": top_skills,
+            "from_cache": False
         }
 
         # Sauvegarder dans le cache
@@ -157,6 +160,7 @@ class MarketAnalyzer:
         # Vérifier le cache
         cached = self.cache.get_cache_results(query, city, province)
         if cached:
+            cached["from_cache"] = True
             return cached
 
         descriptions = self.jsearch.get_job_descriptions(
@@ -173,7 +177,8 @@ class MarketAnalyzer:
                 "location": location,
                 "total_jobs_analyzed": 0,
                 "skills_by_category": {},
-                "message": "No jobs found for this search"
+                "message": "No jobs found for this search",
+                "from_cache": False
             }
 
         # Extraire les skills en parallèle avec Groq
@@ -208,7 +213,8 @@ class MarketAnalyzer:
             "query": query,
             "location": location,
             "total_jobs_analyzed": total_jobs,
-            "skills_by_category": ordered
+            "skills_by_category": ordered,
+            "from_cache": False
         }
 
         # Sauvegarder dans le cache

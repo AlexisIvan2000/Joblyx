@@ -1,6 +1,72 @@
 import pytest
+from unittest.mock import MagicMock
 
 pytest_plugins = ('pytest_asyncio',)
+
+
+@pytest.fixture
+def mock_user_id():
+    return "user-123-test"
+
+
+@pytest.fixture
+def mock_search_result():
+    return {
+        "query": "Python Developer",
+        "location": "Toronto, Ontario, Canada",
+        "total_jobs_analyzed": 25,
+        "top_skills": [
+            {"name": "Python", "category": "programming_languages", "count": 20, "percentage": 80.0},
+            {"name": "React", "category": "frontend_frameworks", "count": 15, "percentage": 60.0},
+            {"name": "PostgreSQL", "category": "databases", "count": 12, "percentage": 48.0}
+        ],
+        "from_cache": False
+    }
+
+
+@pytest.fixture
+def mock_search_result_cached():
+    return {
+        "query": "Python Developer",
+        "location": "Toronto, Ontario, Canada",
+        "total_jobs_analyzed": 25,
+        "top_skills": [
+            {"name": "Python", "category": "programming_languages", "count": 20, "percentage": 80.0}
+        ],
+        "from_cache": True
+    }
+
+
+@pytest.fixture
+def mock_user_history():
+    return [
+        {
+            "id": "search-1",
+            "query": "Python Developer",
+            "city": "Toronto",
+            "province": "Ontario",
+            "total_jobs": 25,
+            "created_at": "2024-01-15T10:00:00"
+        },
+        {
+            "id": "search-2",
+            "query": "Java Developer",
+            "city": "Montreal",
+            "province": "Quebec",
+            "total_jobs": 18,
+            "created_at": "2024-01-14T15:30:00"
+        }
+    ]
+
+
+@pytest.fixture
+def mock_quota_stats():
+    return {
+        "can_search": True,
+        "searches_used": 2,
+        "searches_remaining": 3,
+        "max_searches": 5
+    }
 
 
 @pytest.fixture

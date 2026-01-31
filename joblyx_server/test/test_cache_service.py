@@ -10,6 +10,7 @@ class TestGetCacheResults:
     def test_cache_hit(self, mock_supabase):
         mock_result = MagicMock()
         mock_result.data = {
+            "id": "cache-123",
             "results": {
                 "query": "Python",
                 "location": "Toronto, Ontario, Canada",
@@ -18,7 +19,10 @@ class TestGetCacheResults:
             }
         }
 
+        # Mock pour le SELECT
         mock_supabase.table.return_value.select.return_value.ilike.return_value.ilike.return_value.ilike.return_value.gte.return_value.maybe_single.return_value.execute.return_value = mock_result
+        # Mock pour le UPDATE (trigger hit_count)
+        mock_supabase.table.return_value.update.return_value.eq.return_value.execute.return_value = MagicMock()
 
         service = CacheService()
         result = service.get_cache_results("Python", "Toronto", "Ontario")

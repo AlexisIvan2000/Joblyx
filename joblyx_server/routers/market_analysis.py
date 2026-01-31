@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Query, Header, HTTPException
 from data.models import MarketAnalysisResponse, SkillsByCategoryResponse
 from services.market_analysis import market_analyzer
-from services.user_history import user_history_service
+from services.user import user_history_service, user_quota
 from services.auth import get_user_id_from_token
 
 
@@ -32,8 +32,17 @@ async def analyze_market(
 
     Returns the most in-demand skills based on job postings.
     When balanced=True, ensures diversity across skill categories.
-    If authenticated, the search is saved to user history.
+    If authenticated, the search is saved to user history (max 5 searches/week).
     """
+    user_id = await get_optional_user_id(authorization)
+
+    # Vérifier le quota si authentifié
+    if user_id and not user_quota.can_user_search(user_id):
+        raise HTTPException(
+            status_code=429,
+            detail="Weekly search limit reached (5/week). Try again next week."
+        )
+
     try:
         result = await market_analyzer.analyze_market(
             query=job,
@@ -43,9 +52,12 @@ async def analyze_market(
             balanced=balanced
         )
 
-        # Enregistrer dans l'historique si authentifié
-        user_id = await get_optional_user_id(authorization)
+        # Enregistrer usage + historique si authentifié et recherche réussie
         if user_id and result.get("total_jobs_analyzed", 0) > 0:
+            # Ne décompter du quota que si résultat pas du cache
+            if not result.get("from_cache", False):
+                user_quota.record_search(user_id)
+
             user_history_service.record_search(
                 user_id=user_id,
                 query=job,
@@ -56,6 +68,8 @@ async def analyze_market(
             )
 
         return result
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -69,8 +83,17 @@ async def analyze_market_by_category(
 ):
     """
     Analyze the job market and return skills grouped by category.
-    If authenticated, the search is saved to user history.
+    If authenticated, the search is saved to user history (max 5 searches/week).
     """
+    user_id = await get_optional_user_id(authorization)
+
+    # Vérifier le quota si authentifié
+    if user_id and not user_quota.can_user_search(user_id):
+        raise HTTPException(
+            status_code=429,
+            detail="Weekly search limit reached (5/week). Try again next week."
+        )
+
     try:
         result = await market_analyzer.get_skills_by_category(
             query=job,
@@ -78,9 +101,12 @@ async def analyze_market_by_category(
             province=province
         )
 
-        # Enregistrer dans l'historique si authentifié
-        user_id = await get_optional_user_id(authorization)
+        # Enregistrer usage + historique si authentifié et recherche réussie
         if user_id and result.get("total_jobs_analyzed", 0) > 0:
+            # Ne décompter du quota que si résultat pas du cache
+            if not result.get("from_cache", False):
+                user_quota.record_search(user_id)
+
             user_history_service.record_search(
                 user_id=user_id,
                 query=job,
@@ -91,5 +117,13 @@ async def analyze_market_by_category(
             )
 
         return result
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# Récupère les statistiques de quota de l'utilisateur
+@router.get("/quota")
+async def get_quota_stats(authorization: str = Header(..., description="Bearer token")):
+    user_id = await get_user_id_from_token(authorization)
+    return user_quota.get_stats(user_id)

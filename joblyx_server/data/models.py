@@ -13,6 +13,7 @@ class MarketAnalysisResponse(BaseModel):
     total_jobs_analyzed: int
     top_skills: list[SkillInfo]
     message: str | None = None
+    from_cache: bool = False
 
 
 class SkillsByCategoryResponse(BaseModel):
@@ -20,3 +21,4 @@ class SkillsByCategoryResponse(BaseModel):
     location: str
     total_jobs_analyzed: int
     skills_by_category: dict[str, list[dict]]
+    from_cache: bool = False
