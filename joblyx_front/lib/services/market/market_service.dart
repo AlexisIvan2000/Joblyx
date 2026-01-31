@@ -13,6 +13,7 @@ class MarketService {
     required String province,
     int topN = 25,
     bool balanced = true,
+    String? accessToken,
   }) async {
     try {
       final uri = Uri.parse('$_baseUrl/market/analyze').replace(
@@ -25,14 +26,49 @@ class MarketService {
         },
       );
 
+      final headers = <String, String>{
+        'Content-Type': 'application/json',
+      };
+
+      // Ajouter le token si disponible (pour quota et historique)
+      if (accessToken != null && accessToken.isNotEmpty) {
+        headers['Authorization'] = 'Bearer $accessToken';
+      }
+
       final response = await http.get(
         uri,
-        headers: {'Content-Type': 'application/json'},
+        headers: headers,
       ).timeout(const Duration(seconds: 60));
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         return MarketAnalysisResult.fromMap(data);
+      } else if (response.statusCode == 429) {
+        throw MarketFailure('quota_exceeded');
+      } else {
+        throw MarketFailure('api_error');
+      }
+    } on MarketFailure {
+      rethrow;
+    } catch (e) {
+      throw MarketFailure('network_error');
+    }
+  }
+
+  Future<Map<String, dynamic>> getQuota({required String accessToken}) async {
+    try {
+      final uri = Uri.parse('$_baseUrl/market/quota');
+
+      final response = await http.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
+      ).timeout(const Duration(seconds: 30));
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
       } else {
         throw MarketFailure('api_error');
       }

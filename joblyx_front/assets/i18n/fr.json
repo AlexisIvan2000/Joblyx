@@ -84,7 +84,25 @@
 
     "analysis": {
         "results_title": "Compétences demandées",
-        "jobs_analyzed": "offres analysées"
+        "jobs_analyzed": "offres analysées",
+        "from_cache": "Résultat en cache"
+    },
+
+    "history": {
+        "empty": "Aucun historique de recherche",
+        "recent_searches": "Recherches récentes",
+        "delete_confirm": "Supprimer cette recherche ?",
+        "clear_all": "Effacer tout l'historique",
+        "clear_confirm": "Êtes-vous sûr de vouloir effacer tout l'historique ?",
+        "today": "Aujourd'hui",
+        "yesterday": "Hier",
+        "days_ago": "il y a {days}j"
+    },
+
+    "quota": {
+        "searches_remaining": "recherches restantes cette semaine",
+        "limit_reached": "Limite de recherches atteinte. Réessayez la semaine prochaine.",
+        "unlimited": "Recherches illimitées"
     },
 
     "profil": {
@@ -187,9 +205,8 @@
     "identity_already_exists": "Un compte existe déjà avec le même fournisseur d'identité.",
     "oauth_provider_not_supported": "L'OAuth LinkedIn a été désactivé",
     "network_error": "Erreur de connexion. Vérifiez votre connexion internet.",
-    "api_error": "Erreur du serveur. Veuillez réessayer plus tard."
-
-
+    "api_error": "Erreur du serveur. Veuillez réessayer plus tard.",
+    "quota_exceeded": "Limite de recherches atteinte (5/semaine). Réessayez la semaine prochaine."
   },
 
     "code_verification": {

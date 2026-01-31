@@ -27,6 +27,7 @@ class MarketAnalysisResult {
   final int totalJobsAnalyzed;
   final List<SkillInfo> topSkills;
   final String? message;
+  final bool fromCache;
 
   MarketAnalysisResult({
     required this.query,
@@ -34,6 +35,7 @@ class MarketAnalysisResult {
     required this.totalJobsAnalyzed,
     required this.topSkills,
     this.message,
+    this.fromCache = false,
   });
 
   factory MarketAnalysisResult.fromMap(Map<String, dynamic> data) {
@@ -45,6 +47,7 @@ class MarketAnalysisResult {
           .map((s) => SkillInfo.fromMap(s))
           .toList(),
       message: data['message'],
+      fromCache: data['from_cache'] ?? false,
     );
   }
 }

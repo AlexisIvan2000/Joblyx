@@ -3,23 +3,33 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:joblyx_front/data/canada_locations.dart';
 import 'package:joblyx_front/models/market_analysis_model.dart';
+import 'package:joblyx_front/providers/history_provider.dart';
 import 'package:joblyx_front/providers/market_provider.dart';
 import 'package:joblyx_front/services/app_localizations.dart';
+import 'package:joblyx_front/services/market/market_exception.dart';
 
 class SearchSkills extends ConsumerStatefulWidget {
   const SearchSkills({super.key});
 
   @override
-  ConsumerState<SearchSkills> createState() => _SearchSkillsState();
+  ConsumerState<SearchSkills> createState() => SearchSkillsState();
 }
 
-class _SearchSkillsState extends ConsumerState<SearchSkills> {
+class SearchSkillsState extends ConsumerState<SearchSkills> {
   final _jobController = TextEditingController();
   final _provinceController = TextEditingController();
   final _cityController = TextEditingController();
   String? _selectedProvince;
-  // ignore: unused_field
-  String? _selectedCity;
+
+  /// Remplit les champs avec les valeurs de l'historique
+  void fillFields({required String job, required String city, required String province}) {
+    _jobController.text = job;
+    _provinceController.text = province;
+    _cityController.text = city;
+    setState(() {
+      _selectedProvince = province;
+    });
+  }
 
   @override
   void dispose() {
@@ -58,15 +68,26 @@ class _SearchSkillsState extends ConsumerState<SearchSkills> {
       state.when(
         data: (result) {
           if (result != null) {
+            // Rafraîchir l'historique et le quota après une recherche réussie
+            ref.read(historyProvider.notifier).refresh();
+            ref.read(quotaProvider.notifier).refresh();
             _showResultsBottomSheet(result);
           }
         },
         loading: () {},
-        error: (_, __) {
+        error: (error, __) {
+          String errorKey = 'err.network_error';
+          if (error is MarketFailure) {
+            if (error.code == 'quota_exceeded') {
+              errorKey = 'err.quota_exceeded';
+            } else if (error.code == 'api_error') {
+              errorKey = 'err.api_error';
+            }
+          }
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                AppLocalizations.of(context).t('err.network_error'),
+                AppLocalizations.of(context).t(errorKey),
               ),
             ),
           );
@@ -301,9 +322,8 @@ class _SearchSkillsState extends ConsumerState<SearchSkills> {
                   _provinceController.text = value;
                   setState(() {
                     _selectedProvince = value;
-                    _selectedCity = null;
-                    _cityController.clear();
                   });
+                  _cityController.clear();
                 },
               ),
             ),
@@ -319,7 +339,6 @@ class _SearchSkillsState extends ConsumerState<SearchSkills> {
                 controller: _cityController,
                 onSelected: (value) {
                   _cityController.text = value;
-                  setState(() => _selectedCity = value);
                 },
               ),
             ),

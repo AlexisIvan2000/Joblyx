@@ -38,7 +38,7 @@ class MarketAnalyzer:
         "low_code_no_code",
     ]
 
-    MIN_PERCENTAGE = 20.0
+    MIN_PERCENTAGE = 15.0
     MAX_PER_CATEGORY = 5
 
     def __init__(self):

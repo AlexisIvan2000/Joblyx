@@ -12,18 +12,19 @@ class CacheService:
                 .ilike("city", city) \
                 .ilike("province", province) \
                 .gte("expires_at", datetime.now().isoformat()) \
-                .maybe_single() \
+                .limit(1) \
                 .execute()
 
-            if result.data:
+            if result and result.data and len(result.data) > 0:
+                cache_entry = result.data[0]
                 # Déclencher le trigger pour incrémenter hit_count et refresh TTL
                 supabase.table("search_cache") \
-                    .update({"total_jobs": result.data["results"].get("total_jobs_analyzed", 0)}) \
-                    .eq("id", result.data["id"]) \
+                    .update({"total_jobs": cache_entry["results"].get("total_jobs_analyzed", 0)}) \
+                    .eq("id", cache_entry["id"]) \
                     .execute()
 
                 print(f"Cache hit: {query} - {city} ({province})")
-                return result.data["results"]
+                return cache_entry["results"]
 
             print(f"Cache miss: {query} - {city} ({province})")
             return None
@@ -36,16 +37,38 @@ class CacheService:
     def save_to_cache(self, query: str, city: str, province: str, results: dict, total_jobs: int) -> bool:
 
         try:
-            supabase.table("search_cache").upsert(
-                {
-                    "query": query.lower(),
-                    "city": city.lower(),
-                    "province": province.lower(),
+            query_lower = query.lower()
+            city_lower = city.lower()
+            province_lower = province.lower()
+
+            # Vérifier si existe déjà
+            existing = supabase.table("search_cache") \
+                .select("id") \
+                .ilike("query", query_lower) \
+                .ilike("city", city_lower) \
+                .ilike("province", province_lower) \
+                .limit(1) \
+                .execute()
+
+            if existing and existing.data and len(existing.data) > 0:
+                # UPDATE
+                supabase.table("search_cache") \
+                    .update({
+                        "results": results,
+                        "total_jobs": total_jobs,
+                    }) \
+                    .eq("id", existing.data[0]["id"]) \
+                    .execute()
+            else:
+                # INSERT
+                supabase.table("search_cache").insert({
+                    "query": query_lower,
+                    "city": city_lower,
+                    "province": province_lower,
                     "results": results,
                     "total_jobs": total_jobs,
-                },
-                on_conflict="idx_unique_search_case_insensitive"
-            ).execute()
+                }).execute()
+
             print(f"Cache saved: {query} - {city} ({province})")
             return True
 

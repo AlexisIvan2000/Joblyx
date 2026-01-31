@@ -53,8 +53,9 @@
     "sign_up": "Register",
     "have_account": "Already have an account?",
     "sign_in": "Login",
-    "confirm_email": "Check your email to continue your registration."  
-
+    "confirm_email": "Check your email to continue your registration.",
+    "confirm_email_title": "Didn't receive the email?",
+    "resend_code": "Resend code"
   },
 
   "nav":{
@@ -83,7 +84,25 @@
 
   "analysis": {
     "results_title": "In-demand skills",
-    "jobs_analyzed": "jobs analyzed"
+    "jobs_analyzed": "jobs analyzed",
+    "from_cache": "Cached result"
+  },
+
+  "history": {
+    "empty": "No search history yet",
+    "recent_searches": "Recent searches",
+    "delete_confirm": "Delete this search?",
+    "clear_all": "Clear all history",
+    "clear_confirm": "Are you sure you want to clear all history?",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "days_ago": "{days}d ago"
+  },
+
+  "quota": {
+    "searches_remaining": "searches remaining this week",
+    "limit_reached": "Weekly search limit reached. Try again next week.",
+    "unlimited": "Unlimited searches"
   },
 
   "profil":{
@@ -187,7 +206,8 @@
     "identity_already_exists": "An account already exists with the same identity provider.",
     "oauth_provider_not_supported": "The LinkedIn OAuth was disabled",
     "network_error": "Connection error. Please check your internet connection.",
-    "api_error": "Server error. Please try again later."
+    "api_error": "Server error. Please try again later.",
+    "quota_exceeded": "Weekly search limit reached (5/week). Try again next week."
   },
 
   "code_verification": {

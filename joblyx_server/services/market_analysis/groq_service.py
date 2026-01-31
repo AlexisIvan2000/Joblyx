@@ -53,7 +53,7 @@ RETURN FORMAT (JSON array only):
 
         try:
             response = self.client.chat.completions.create(
-                model="llama-3.1-8b-instant",
+                model="meta-llama/llama-4-scout-17b-16e-instruct",
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0,
                 max_tokens=500
@@ -88,46 +88,55 @@ RETURN FORMAT (JSON array only):
             for skill in skills
         ]
 
-    async def extract_skills_async(self, job_description: str) -> list[str]:
-        """Version async de extract_skills"""
+    async def extract_skills_async(self, job_description: str, max_retries: int = 3) -> list[str]:
+        """Version async de extract_skills avec retry pour rate limit"""
 
         prompt = f"""Extract technical skills from this job posting.
 
-            RULES:
-            1. ONLY return skills from this list: {", ".join(self.skills_list)}
-            2. Return ONLY a JSON array, nothing else
-            3. Ignore skills not in the list
+RULES:
+1. ONLY return skills from this list: {", ".join(self.skills_list)}
+2. Return ONLY a JSON array, nothing else
+3. Ignore skills not in the list
 
-            JOB POSTING:
-            {job_description[:3000]}
+JOB POSTING:
+{job_description[:3000]}
 
-            RETURN FORMAT (JSON array only):
-            
-            ["Python", "React", "AWS"]"""
+RETURN FORMAT (JSON array only):
+["Python", "React", "AWS"]"""
 
-        try:
-            response = await self.async_client.chat.completions.create(
-                model="llama-3.1-8b-instant",
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0,
-                max_tokens=500
-            )
+        for attempt in range(max_retries):
+            try:
+                response = await self.async_client.chat.completions.create(
+                    model="meta-llama/llama-4-scout-17b-16e-instruct",
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0,
+                    max_tokens=500
+                )
 
-            content = response.choices[0].message.content.strip()
+                content = response.choices[0].message.content.strip()
 
-            if content.startswith("```json"):
-                content = content[7:]
-            if content.startswith("```"):
-                content = content[3:]
-            if content.endswith("```"):
-                content = content[:-3]
+                if content.startswith("```json"):
+                    content = content[7:]
+                if content.startswith("```"):
+                    content = content[3:]
+                if content.endswith("```"):
+                    content = content[:-3]
 
-            skills = json.loads(content.strip())
-            return [s for s in skills if s in self.skills_list]
+                skills = json.loads(content.strip())
+                return [s for s in skills if s in self.skills_list]
 
-        except Exception as e:
-            print(f"Erreur Groq async: {e}")
-            return []
+            except Exception as e:
+                error_str = str(e)
+                if "429" in error_str or "rate_limit" in error_str:
+                    wait_time = (attempt + 1) * 15  # 15s, 30s, 45s
+                    print(f"Groq rate limit, retry in {wait_time}s (attempt {attempt + 1}/{max_retries})")
+                    await asyncio.sleep(wait_time)
+                else:
+                    print(f"Erreur Groq async: {e}")
+                    return []
+
+        print("Groq: max retries exceeded")
+        return []
 
     async def extract_skills_list_async(self, job_description: str) -> list[dict]:
         """Version async de extract_skills_list"""
@@ -137,9 +146,15 @@ RETURN FORMAT (JSON array only):
             for skill in skills
         ]
 
-    async def extract_all_skills(self, descriptions: list[str]) -> list[list[dict]]:
-        """Extrait les skills de plusieurs descriptions en parallèle"""
-        tasks = [self.extract_skills_list_async(desc) for desc in descriptions]
+    async def extract_all_skills(self, descriptions: list[str], max_concurrent: int = 2) -> list[list[dict]]:
+        """Extrait les skills de plusieurs descriptions avec limite de concurrence"""
+        semaphore = asyncio.Semaphore(max_concurrent)
+
+        async def extract_with_limit(desc: str) -> list[dict]:
+            async with semaphore:
+                return await self.extract_skills_list_async(desc)
+
+        tasks = [extract_with_limit(desc) for desc in descriptions]
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
         # Filtrer les erreurs
